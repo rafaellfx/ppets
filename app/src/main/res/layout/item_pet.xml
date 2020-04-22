@@ -5,10 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/txtName"
-        android:padding="10dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvPet"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="3dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/imgPet"/>
+
+
+            <TextView
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/imgPet"
+                android:id="@+id/txtName"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

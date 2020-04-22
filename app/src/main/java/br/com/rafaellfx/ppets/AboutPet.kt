@@ -10,6 +10,7 @@ class AboutPet : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.about_pet_activity)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val pet = intent.getSerializableExtra("pet") as Pet
 

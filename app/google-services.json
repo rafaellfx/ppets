@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "67935011631",
+    "firebase_url": "https://ppets-71bfa.firebaseio.com",
+    "project_id": "ppets-71bfa",
+    "storage_bucket": "ppets-71bfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67935011631:android:b3a2d15214bd73322557da",
+        "android_client_info": {
+          "package_name": "br.com.rafaellfx.ppets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67935011631-pbu2nlli7td18j56vt96pgfjtit91ji4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQhY4ZO-E-oGSSX8Fz9vL6nUMKTU5qRBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67935011631-pbu2nlli7td18j56vt96pgfjtit91ji4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

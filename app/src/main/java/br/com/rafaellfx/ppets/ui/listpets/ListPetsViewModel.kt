@@ -4,24 +4,32 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.rafaellfx.ppets.model.Pet
+import br.com.rafaellfx.ppets.services.PetsService
 
 class ListPetsViewModel : ViewModel() {
 
     var listPets: MutableLiveData<List<Pet>> = MutableLiveData<List<Pet>>()
 
-    fun getPets(){
-        val dog = Pet("","Pluto", ArrayList<String>(),"","")
-        val cat = Pet("","Frajola", ArrayList<String>(),"","")
+    fun getPets() {
 
         val pets: MutableList<Pet> = ArrayList<Pet>()
-        pets.add(dog)
-        pets.add(cat)
 
-        listPets.value = pets
+
+        PetsService.findAll().addOnSuccessListener  { p ->
+            p.map  { p ->
+                pets.add(
+                    Pet(
+                        p.id,
+                        p.data["name"].toString(),
+                        p.data["photos"] as ArrayList<String>,
+                        p.data["locationId"].toString()
+                    )
+                )
+            }
+
+            listPets.value = pets
+        }
+
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.e("teste", "onCleared")
-    }
 }

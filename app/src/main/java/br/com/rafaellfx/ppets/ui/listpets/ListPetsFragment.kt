@@ -19,12 +19,13 @@ class ListPetsFragment : Fragment() {
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewModel: ListPetsViewModel
 
     companion object {
         fun newInstance() = ListPetsFragment()
     }
 
-    private lateinit var viewModel: ListPetsViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +53,6 @@ class ListPetsFragment : Fragment() {
         })
         viewModel.getPets()
 
-        Log.e("teste", "viewModel ${viewModel.toString()}")
     }
 
 }

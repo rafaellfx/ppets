@@ -15,14 +15,14 @@ import br.com.rafaellfx.ppets.model.Pet
 class AboutPetFragment : Fragment() {
 
     companion object {
-        fun newInstance(pet: Pet): AboutPetFragment{
+        fun newInstance(pet: Pet): AboutPetFragment {
             val f = AboutPetFragment()
 
             val args = Bundle()
             args.putSerializable("pet", pet)
             f.arguments = args
 
-            return  f
+            return f
         }
     }
 
@@ -39,7 +39,8 @@ class AboutPetFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AboutPetViewModel::class.java)
 
-        val binding: AboutPetFragmentBinding = DataBindingUtil.setContentView(activity!!,R.layout.about_pet_fragment)
+        val binding: AboutPetFragmentBinding =
+            DataBindingUtil.setContentView(activity!!, R.layout.about_pet_fragment)
         binding.viewModel = viewModel
 
         viewModel.pet = arguments?.getSerializable("pet") as Pet
