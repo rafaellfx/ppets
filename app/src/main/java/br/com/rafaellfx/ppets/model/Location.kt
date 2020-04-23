@@ -8,8 +8,8 @@ data class Location(
     val longitude: String
 ) : Serializable, ModelInterface {
 
-    override fun fromMap(): HashMap<String, String> {
-        var local = hashMapOf(
+    override fun fromMap(): HashMap<Any, Any> {
+        var local = hashMapOf <Any,Any>(
             "id" to this.id,
             "latitude" to this.latidute,
             "longitude" to this.longitude

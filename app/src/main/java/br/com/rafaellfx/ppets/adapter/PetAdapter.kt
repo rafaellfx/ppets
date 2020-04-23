@@ -33,7 +33,7 @@ class PetAdapter(private val myDataset: List<Pet>, private val context: Context)
         holder.viewRoot.txtName.text = "${myDataset[position].name}"
 
         Glide.with(context)
-            .load("https://firebasestorage.googleapis.com/v0/b/ppets-71bfa.appspot.com/o/pluto.jpeg?alt=media&token=33306dbe-6010-4891-a33f-35d7e46309d5")
+            .load("${myDataset[position].photos[0]}")
             .into(holder.viewRoot.imgPet);
 
         holder.viewRoot.setOnClickListener {

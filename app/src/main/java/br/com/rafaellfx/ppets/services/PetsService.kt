@@ -1,9 +1,7 @@
 package br.com.rafaellfx.ppets.services
 
-import android.util.Log
 import br.com.rafaellfx.ppets.model.Pet
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 class PetsService {

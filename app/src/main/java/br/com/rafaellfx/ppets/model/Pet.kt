@@ -10,9 +10,9 @@ data class Pet(
 ) : Serializable, ModelInterface {
 
 
-    override fun fromMap(): HashMap<String, Any> {
+    override fun fromMap(): HashMap<Any, Any> {
 
-        val pro = hashMapOf(
+        val pro = hashMapOf<Any,Any>(
             "id" to this.id,
             "name" to this.name,
             "photos" to this.photos.map { photo ->  photo },

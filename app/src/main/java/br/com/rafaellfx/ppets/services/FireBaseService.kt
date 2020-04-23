@@ -1,7 +1,7 @@
 package br.com.rafaellfx.ppets.services
 
 import android.util.Log
-import br.com.rafaellfx.ppets.model.ModelInterface
+import com.firebase.ui.auth.data.model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -16,7 +16,7 @@ open class FireBaseService(collection: String) {
         return firebase.get()
     }
 
-    open fun save(obj: ModelInterface) {
+    open fun save(obj: User) {
         firebase
             .add(obj.fromMap())
             .addOnSuccessListener { documentReference ->
@@ -27,7 +27,7 @@ open class FireBaseService(collection: String) {
             }
     }
 
-    open fun update(obj: ModelInterface) {
+    open fun update(obj: User) {
         firebase.document(obj.id)
             .update(obj.fromMap() as Map<String, Any>)
             .addOnSuccessListener { documentReference ->
@@ -38,11 +38,11 @@ open class FireBaseService(collection: String) {
             }
     }
 
-    open fun delete(obj: ModelInterface) {
+    open fun delete(obj: User) {
         firebase.document(obj.id)
             .delete()
             .addOnSuccessListener { documentReference ->
-                Log.d("LOGTESTE", "Feito")
+                Log.d("LOGTESTE", "Feito ${documentReference}")
             }
             .addOnFailureListener { e ->
                 Log.w("LOGTESTE", "Error ", e)

@@ -20,4 +20,10 @@ class AboutPet : AppCompatActivity() {
                 .commitNow()
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.PetsService
+import com.google.firebase.auth.FirebaseAuth
 
 class ListPetsViewModel : ViewModel() {
 
@@ -13,7 +14,6 @@ class ListPetsViewModel : ViewModel() {
     fun getPets() {
 
         val pets: MutableList<Pet> = ArrayList<Pet>()
-
 
         PetsService.findAll().addOnSuccessListener  { p ->
             p.map  { p ->
@@ -30,6 +30,16 @@ class ListPetsViewModel : ViewModel() {
             listPets.value = pets
         }
 
+    }
+
+    fun isLoggedIn(): Boolean {
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+
+        if (currentUser == null) {
+            return false
+        }
+        return true
     }
 
 }
