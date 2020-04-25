@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import br.com.rafaellfx.ppets.ListPets
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.SignUpActivity
 import br.com.rafaellfx.ppets.databinding.SignInFragmentBinding
@@ -32,7 +35,8 @@ class SignInFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
 
-        val binding: SignInFragmentBinding = DataBindingUtil.setContentView(activity!!, R.layout.sign_in_fragment)
+        val binding: SignInFragmentBinding =
+            DataBindingUtil.setContentView(activity!!, R.layout.sign_in_fragment)
         binding.viewModel = viewModel
 
         binding.btnRegister.setOnClickListener {
@@ -41,7 +45,28 @@ class SignInFragment : Fragment() {
         }
 
         binding.btnEnter.setOnClickListener {
-            viewModel.singIn(binding.editEmail.text.toString(), binding.editSenha.text.toString())
+
+                if (binding.editEmail.text.isEmpty() || binding.editSenha.text.isEmpty()) {
+                    Toast.makeText(context, "E-mail ou senha incorreta, Tente novamente!", Toast.LENGTH_SHORT).show()
+                }else{
+
+                    viewModel.singIn(binding.editEmail.text.toString(), binding.editSenha.text.toString())
+
+                    viewModel.isLogged.observe(viewLifecycleOwner, Observer {
+                        viewModel.isLogged.value?.let {
+                            if (it){
+                                activity!!.finish()
+                                startActivity(Intent(context, ListPets::class.java))
+                            }else{
+                                binding.editEmail.text = null
+                                binding.editSenha.text = null
+                                Toast.makeText(context, "E-mail ou senha incorreta, Tente novamente!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    })
+
+                }
+
         }
     }
 

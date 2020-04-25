@@ -37,8 +37,6 @@ class ListPetsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ListPetsViewModel::class.java)
 
-        Log.d("teste", "entrou")
-
         if(!viewModel.isLoggedIn()){
             activity!!.finish()
             startActivity(Intent(context, SignInActivity::class.java))
