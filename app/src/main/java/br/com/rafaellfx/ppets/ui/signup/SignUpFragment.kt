@@ -1,6 +1,5 @@
-package br.com.rafaellfx.ppets.ui.singup
+package br.com.rafaellfx.ppets.ui.signup
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,29 +8,29 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import br.com.rafaellfx.ppets.R
-import br.com.rafaellfx.ppets.databinding.SingUpFragmentBinding
+import br.com.rafaellfx.ppets.databinding.SignUpFragmentBinding
 
-class SingUpFragment : Fragment() {
+class SignUpFragment : Fragment() {
 
     companion object {
-        fun newInstance() = SingUpFragment()
+        fun newInstance() = SignUpFragment()
     }
 
-    private lateinit var viewModel: SingUpViewModel
+    private lateinit var viewModel: SignUpViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.sing_up_fragment, container, false)
+        return inflater.inflate(R.layout.sign_up_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SingUpViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
-        val binding: SingUpFragmentBinding =
-            DataBindingUtil.setContentView(activity!!, R.layout.sing_up_fragment)
+        val binding: SignUpFragmentBinding =
+            DataBindingUtil.setContentView(activity!!, R.layout.sign_up_fragment)
     }
 
 }

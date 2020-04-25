@@ -10,8 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import br.com.rafaellfx.ppets.LoginActivity
 import br.com.rafaellfx.ppets.R
+import br.com.rafaellfx.ppets.SignInActivity
 import br.com.rafaellfx.ppets.adapter.PetAdapter
 import kotlinx.android.synthetic.main.list_pets_fragment.*
 
@@ -37,9 +37,11 @@ class ListPetsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ListPetsViewModel::class.java)
 
-        Log.d("teste", viewModel.isLoggedIn().toString())
+        Log.d("teste", "entrou")
+
         if(!viewModel.isLoggedIn()){
-            startActivity(Intent(context, LoginActivity::class.java))
+            activity!!.finish()
+            startActivity(Intent(context, SignInActivity::class.java))
         }
 
         viewManager = LinearLayoutManager(activity)
@@ -49,8 +51,11 @@ class ListPetsFragment : Fragment() {
             layoutManager = viewManager
         }
 
+        //LiveData
         viewModel.listPets.observe(viewLifecycleOwner, Observer {
+
             viewModel.listPets.value?.let {
+
                 viewAdapter = PetAdapter(it, activity as Context)
                 rv_pets.adapter = viewAdapter
             }

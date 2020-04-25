@@ -16,8 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SingUpActivity"></activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".SingInActivity1" />
         <activity android:name=".AboutPet" />
         <activity android:name=".ListPets">
             <intent-filter>

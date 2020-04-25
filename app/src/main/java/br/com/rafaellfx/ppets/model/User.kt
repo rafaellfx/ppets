@@ -5,16 +5,17 @@ import java.io.Serializable
 class User (
     override var id: String,
     val locationId: String,
+    val phone: String,
     val name: String
 ) : Serializable, ModelInterface {
 
-    override fun fromMap(): HashMap<Any, Any> {
-        var user = hashMapOf<Any, Any>(
-            "id" to this.id,
-            "locationId" to this.locationId,
-            "name" to this.name
+    override fun fromMap(): HashMap<String, Any> {
+        return hashMapOf(
+            "id" to id,
+            "locationId" to locationId,
+            "phone" to phone,
+            "name" to name
 
             )
-        return user
     }
 }

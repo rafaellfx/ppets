@@ -1,6 +1,6 @@
 package br.com.rafaellfx.ppets.services
 
-import com.firebase.ui.auth.data.model.User
+import br.com.rafaellfx.ppets.model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QuerySnapshot
 

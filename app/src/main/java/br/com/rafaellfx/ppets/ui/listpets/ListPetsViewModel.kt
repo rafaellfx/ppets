@@ -16,13 +16,13 @@ class ListPetsViewModel : ViewModel() {
         val pets: MutableList<Pet> = ArrayList<Pet>()
 
         PetsService.findAll().addOnSuccessListener  { p ->
-            p.map  { p ->
+            p.map  { pet ->
                 pets.add(
                     Pet(
-                        p.id,
-                        p.data["name"].toString(),
-                        p.data["photos"] as ArrayList<String>,
-                        p.data["locationId"].toString()
+                        pet.id,
+                        pet.data["name"].toString(),
+                        pet.data["photos"] as ArrayList<String>,
+                        pet.data["locationId"].toString()
                     )
                 )
             }
