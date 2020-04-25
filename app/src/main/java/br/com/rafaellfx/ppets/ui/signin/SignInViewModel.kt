@@ -7,10 +7,9 @@ import br.com.rafaellfx.ppets.model.User
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInViewModel : ViewModel() {
-    var user: User? = null
     var isLogged: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    fun singIn(email: String, pass: String) {
+    fun signIn(email: String, pass: String) {
 
         val auth = FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(email, pass)

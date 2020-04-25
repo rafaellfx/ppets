@@ -8,7 +8,7 @@ import com.google.firebase.firestore.QuerySnapshot
 
 open class FireBaseService(collection: String) {
 
-    protected val firebase = FirebaseFirestore.getInstance().collection(collection)
+    var firebase = FirebaseFirestore.getInstance().collection(collection)
 
 
     open fun findAll(): Task<QuerySnapshot> {

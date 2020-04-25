@@ -6,7 +6,9 @@ class User (
     override var id: String,
     val locationId: String,
     val phone: String,
-    val name: String
+    val name: String,
+    val email: String,
+    val password: String
 ) : Serializable, ModelInterface {
 
     override fun fromMap(): HashMap<String, Any> {
@@ -15,7 +17,6 @@ class User (
             "locationId" to locationId,
             "phone" to phone,
             "name" to name
-
             )
     }
 }

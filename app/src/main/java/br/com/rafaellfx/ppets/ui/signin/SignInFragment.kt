@@ -50,7 +50,7 @@ class SignInFragment : Fragment() {
                     Toast.makeText(context, "E-mail ou senha incorreta, Tente novamente!", Toast.LENGTH_SHORT).show()
                 }else{
 
-                    viewModel.singIn(binding.editEmail.text.toString(), binding.editSenha.text.toString())
+                    viewModel.signIn(binding.editEmail.text.toString(), binding.editSenha.text.toString())
 
                     viewModel.isLogged.observe(viewLifecycleOwner, Observer {
                         viewModel.isLogged.value?.let {
