@@ -3,13 +3,13 @@ package br.com.rafaellfx.ppets.ui.listpets
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.com.rafaellfx.ppets.NewPetActivity
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.SignInActivity
 import br.com.rafaellfx.ppets.adapter.PetAdapter
@@ -48,7 +48,19 @@ class ListPetsFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = viewManager
         }
+        floatingActionButton.setOnClickListener { addPet() }
+    }
 
+    override fun onStart() {
+        super.onStart()
+        observer()
+    }
+
+    fun addPet(){
+        startActivity(Intent(context, NewPetActivity::class.java))
+    }
+
+    private fun observer(){
         //LiveData
         viewModel.listPets.observe(viewLifecycleOwner, Observer {
 
@@ -58,9 +70,7 @@ class ListPetsFragment : Fragment() {
                 rv_pets.adapter = viewAdapter
             }
         })
-
         viewModel.getPets()
-
     }
 
 }

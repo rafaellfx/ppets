@@ -21,7 +21,8 @@ class ListPetsViewModel : ViewModel() {
                     Pet(
                         pet.id,
                         pet.data["name"].toString(),
-                        pet.data["photos"] as ArrayList<String>,
+                        pet.data["description"].toString(),
+                        pet.data["photo"].toString(),
                         pet.data["locationId"].toString()
                     )
                 )

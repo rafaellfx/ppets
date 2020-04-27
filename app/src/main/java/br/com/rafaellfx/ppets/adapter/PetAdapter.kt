@@ -3,6 +3,7 @@ package br.com.rafaellfx.ppets.adapter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,10 +33,13 @@ class PetAdapter(private val myDataset: List<Pet>, private val context: Context)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.viewRoot.txtName.text = "${myDataset[position].name}"
 
-        Glide.with(context)
-            .load("${myDataset[position].photos[0]}")
-            .into(holder.viewRoot.imgPet);
 
+
+        if(myDataset[position].photo.isNotEmpty()) {
+            Glide.with(context)
+                .load("${myDataset[position].photo}")
+                .into(holder.viewRoot.imgPet);
+        }
         holder.viewRoot.setOnClickListener {
             val intent = Intent(context, AboutPet::class.java)
             intent.putExtra("pet", myDataset[position])
