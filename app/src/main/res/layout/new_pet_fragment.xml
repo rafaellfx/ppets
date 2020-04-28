@@ -33,7 +33,8 @@
                 <RelativeLayout
                     android:id="@+id/relativeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
+                    android:scaleType="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -80,7 +81,7 @@
                 <EditText
                     android:id="@+id/edDescription"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp"
+                    android:layout_height="100dp"
                     android:layout_marginTop="20dp"
                     android:ems="10"
                     android:hint="Descrição"
@@ -95,6 +96,12 @@
                     android:text="Salvar"
                     android:textColor="@android:color/white"
                     android:textSize="20dp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_circular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

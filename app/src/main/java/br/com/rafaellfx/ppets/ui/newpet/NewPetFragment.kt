@@ -13,24 +13,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import br.com.rafaellfx.ppets.R
-import br.com.rafaellfx.ppets.databinding.NewPetFragmentBinding
+import br.com.rafaellfx.ppets.model.Location
 import br.com.rafaellfx.ppets.model.Pet
+import br.com.rafaellfx.ppets.services.LocationService
 import br.com.rafaellfx.ppets.services.PetsService
-import com.bumptech.glide.Glide
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.list_pets_fragment.*
 import kotlinx.android.synthetic.main.new_pet_fragment.*
 import java.io.ByteArrayOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class NewPetFragment : Fragment() {
 
     val REQUEST_IMAGE_CAPTURE = 1
     lateinit var picture: Bitmap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     companion object {
         fun newInstance() = NewPetFragment()
@@ -48,6 +49,9 @@ class NewPetFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(NewPetViewModel::class.java)
+
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
 
         iv_profile.setOnClickListener { takePicture() }
         btnSalvar.setOnClickListener { addPicture() }
@@ -67,11 +71,13 @@ class NewPetFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK) {
 
                 picture = data!!.extras!!.get("data") as Bitmap
-                //binding.ivProfile.setImageBitmap(picture)
-                iv_profile.visibility = View.GONE
+                iv_profile.layoutParams.height = 500
+                iv_profile.layoutParams.width = 500
+                iv_profile.isOval = false
+
                 tvInform.visibility = View.GONE
                 val bitmap = BitmapDrawable(resources, picture)
-                relativeLayout.setBackground(bitmap)
+                iv_profile.setImageDrawable(bitmap)
 
             }
         }
@@ -80,25 +86,32 @@ class NewPetFragment : Fragment() {
     private fun save(photo: String = "") {
 
         if (edName.text.isNotEmpty() || edDescription.text.isNotEmpty()) {
-            PetsService.save(
-                Pet(
-                    "",
-                    edName.text.toString(),
-                    edDescription.text.toString(),
-                    photo,
-                    "logationId"
-                )
-            )
-            activity!!.finish()
+
+            var name = edName.text.toString()
+            var description = edDescription.text.toString()
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener {
+                    Log.d("teste", it.latitude.toString())
+
+                    LocationService.save(Location("", it.latitude, it.longitude)).addOnSuccessListener{
+                        var ids = ArrayList<String>()
+                        ids.add(it.id)
+                        PetsService.save(Pet("",name,description,photo,ids)).addOnSuccessListener { showProgress(false) }
+                    }
+                }
+
         }
     }
 
     private fun addPicture() {
-        if (this::picture.isInitialized) {
+        if (this::picture.isInitialized && edName.text.isNotEmpty() || edDescription.text.isNotEmpty()) {
+
+           showProgress(true)
+
+
             var fileName = "${Calendar.getInstance().timeInMillis}.jpg"
             var firebaseStorage = FirebaseStorage.getInstance()
             var referec = firebaseStorage.reference.child(fileName)
-            var uriForReturn: String = ""
 
             val baos = ByteArrayOutputStream()
             picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -122,6 +135,18 @@ class NewPetFragment : Fragment() {
             }
         } else {
             save()
+        }
+    }
+
+    private fun showProgress(show: Boolean) {
+        if(show){
+            progress_circular.visibility = View.VISIBLE
+            edName.visibility = View.GONE
+            edDescription.visibility = View.GONE
+            iv_profile.visibility = View.GONE
+            btnSalvar.visibility = View.GONE
+        }else{
+            activity!!.finish()
         }
     }
 }

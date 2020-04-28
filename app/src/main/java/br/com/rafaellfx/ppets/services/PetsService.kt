@@ -2,6 +2,7 @@ package br.com.rafaellfx.ppets.services
 
 import br.com.rafaellfx.ppets.model.Pet
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.QuerySnapshot
 
 class PetsService {
@@ -11,8 +12,8 @@ class PetsService {
 
         fun findAll(): Task<QuerySnapshot> = service.findAll()
 
-        fun save(pet: Pet) {
-            service.save(pet)
+        fun save(pet: Pet): Task<DocumentReference> {
+           return service.save(pet)
         }
 
         fun update(pet: Pet) {

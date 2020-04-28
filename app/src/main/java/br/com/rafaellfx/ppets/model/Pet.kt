@@ -7,7 +7,7 @@ data class Pet(
     val name: String,
     val description: String,
     val photo: String,
-    val locationId: String
+    val locationId: ArrayList<String>
 ) : Serializable, ModelInterface {
 
 

@@ -3,6 +3,7 @@ package br.com.rafaellfx.ppets.services
 import android.util.Log
 import br.com.rafaellfx.ppets.model.ModelInterface
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -16,15 +17,10 @@ open class FireBaseService(collection: String) {
         return firebase.get()
     }
 
-    open fun save(obj: ModelInterface) {
-        firebase
+    open fun save(obj: ModelInterface): Task<DocumentReference> {
+
+        return this.firebase
             .add(obj.fromMap())
-            .addOnSuccessListener { documentReference ->
-                Log.d("LOGTESTE", "${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("LOGTESTE", "Error ", e)
-            }
     }
 
     open fun update(obj: ModelInterface) {
@@ -49,3 +45,4 @@ open class FireBaseService(collection: String) {
             }
     }
 }
+
