@@ -2,10 +2,8 @@ package br.com.rafaellfx.ppets.ui.newpet
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -83,7 +81,7 @@ class NewPetFragment : Fragment() {
         }
     }
 
-    private fun save(photo: String = "") {
+    private fun save(photoUrl: String = "", namePhoto: String = "") {
 
         if (edName.text.isNotEmpty() || edDescription.text.isNotEmpty()) {
 
@@ -96,7 +94,7 @@ class NewPetFragment : Fragment() {
                     LocationService.save(Location("", it.latitude, it.longitude)).addOnSuccessListener{
                         var ids = ArrayList<String>()
                         ids.add(it.id)
-                        PetsService.save(Pet("",name,description,photo,ids)).addOnSuccessListener { showProgress(false) }
+                        PetsService.save(Pet("",name,description,photoUrl,namePhoto,ids)).addOnSuccessListener { showProgress(false) }
                     }
                 }
 
@@ -129,7 +127,8 @@ class NewPetFragment : Fragment() {
                 }.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val downloadUri = task.result
-                        save(downloadUri.toString())
+                        val namePhoto = referec.name
+                        save(downloadUri.toString(), namePhoto)
                     }
                 }
             }

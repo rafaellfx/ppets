@@ -18,13 +18,14 @@ class ListPetsViewModel : ViewModel() {
         PetsService.findAll().addOnSuccessListener  { p ->
             p.map  { pet ->
 
-                var locationId: ArrayList<String> = (if (pet.data["locationId"] != null) pet.data["locationId"]  else ArrayList<String>()) as ArrayList<String>
+                var locationId: ArrayList<String> = ((if (pet.data["locationId"] != null) pet.data["locationId"]  else ArrayList<String>()) as ArrayList<String>)
                 pets.add(
                     Pet(
                         pet.id,
                         pet.data["name"].toString(),
                         pet.data["description"].toString(),
-                        pet.data["photo"].toString(),
+                        pet.data["photoUrl"].toString(),
+                        pet.data["namePhoto"].toString(),
                         locationId
                     )
                 )

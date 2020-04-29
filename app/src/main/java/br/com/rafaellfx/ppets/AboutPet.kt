@@ -13,6 +13,7 @@ class AboutPet : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val pet = intent.getSerializableExtra("pet") as Pet
+        setTitle(pet.name)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

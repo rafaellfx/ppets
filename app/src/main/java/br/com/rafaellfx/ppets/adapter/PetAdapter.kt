@@ -7,12 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.rafaellfx.ppets.AboutPet
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.model.Pet
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.item_pet.view.*
+import kotlin.math.acos
 
 class PetAdapter(private val myDataset: List<Pet>, private val context: Context) :
 
@@ -22,7 +27,8 @@ class PetAdapter(private val myDataset: List<Pet>, private val context: Context)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int): PetAdapter.MyViewHolder {
+        viewType: Int
+    ): PetAdapter.MyViewHolder {
 
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.item_pet, parent, false)
 
@@ -33,17 +39,27 @@ class PetAdapter(private val myDataset: List<Pet>, private val context: Context)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.viewRoot.txtName.text = "${myDataset[position].name}"
 
+        loadImage(holder.viewRoot.imgPet, "${myDataset[position].photoUrl}")
 
-
-        if(myDataset[position].photo.isNotEmpty()) {
-            Glide.with(context)
-                .load("${myDataset[position].photo}")
-                .into(holder.viewRoot.imgPet);
-        }
         holder.viewRoot.setOnClickListener {
             val intent = Intent(context, AboutPet::class.java)
             intent.putExtra("pet", myDataset[position])
             context.startActivity(intent)
+        }
+    }
+
+    companion object {
+        @BindingAdapter("imageUrl")
+        @JvmStatic
+        fun loadImage(view: ImageView, url: String?) {
+            if (!url.isNullOrEmpty()) {
+                Glide.with(view.context)
+                    .load(url)
+                    //.centerCrop()
+                    .fitCenter()
+                    .override(680,680)
+                    .into(view);
+            }
         }
     }
 

@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
-            tools:context=".ui.aboutpet.AboutPetFragment">
+            tools:context=".ui.newpet.NewPetFragment">
 
             <LinearLayout
                 android:id="@+id/newPet"

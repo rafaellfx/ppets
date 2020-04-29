@@ -6,7 +6,8 @@ data class Pet(
     override var id: String,
     val name: String,
     val description: String,
-    val photo: String,
+    val photoUrl: String,
+    val namePhoto:String,
     val locationId: ArrayList<String>
 ) : Serializable, ModelInterface {
 
@@ -14,7 +15,8 @@ data class Pet(
     override fun fromMap(): HashMap<String, Any> {
         return hashMapOf(
             "name" to name,
-            "photo" to photo,
+            "photoUrl" to photoUrl,
+            "namePhoto" to namePhoto,
             "description" to description,
             "locationId" to locationId
         )
