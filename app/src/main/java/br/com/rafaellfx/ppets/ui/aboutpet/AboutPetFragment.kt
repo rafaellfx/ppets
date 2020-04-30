@@ -22,10 +22,13 @@ import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
 import br.com.rafaellfx.ppets.services.PetsService
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.about_pet_fragment.*
 import kotlinx.android.synthetic.main.new_pet_fragment.*
 import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AboutPetFragment : Fragment() {
 
@@ -60,7 +63,9 @@ class AboutPetFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AboutPetViewModel::class.java)
 
-        binding = DataBindingUtil.setContentView(activity!!,R.layout.about_pet_fragment)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+
+        binding = DataBindingUtil.setContentView(activity!!, R.layout.about_pet_fragment)
         binding.viewModel = viewModel
         viewModel.pet = arguments?.getSerializable("pet") as Pet
 
@@ -68,7 +73,7 @@ class AboutPetFragment : Fragment() {
         binding.editPhoto.setOnClickListener { takePicture() }
         binding.btnEditSalvar.setOnClickListener { updatePicture() }
 
-        if(viewModel.pet!!.photoUrl.isEmpty()){
+        if (viewModel.pet!!.photoUrl.isEmpty()) {
             binding.editPhoto.visibility = View.GONE
             binding.ivEditprofile.visibility = View.VISIBLE
         }
@@ -88,9 +93,9 @@ class AboutPetFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK) {
 
                 picture = data!!.extras!!.get("data") as Bitmap
-//                binding.ivEditprofile.layoutParams.height = 500
-//                binding.ivEditprofile.layoutParams.width = 500
-//                binding.ivEditprofile.isOval = true
+                if (viewModel.pet!!.namePhoto.isEmpty()) {
+                    viewModel.pet!!.namePhoto = "${Calendar.getInstance().timeInMillis}.jpg"
+                }
                 binding.editPhoto.visibility = View.VISIBLE
                 binding.ivEditprofile.visibility = View.GONE
 
@@ -101,10 +106,13 @@ class AboutPetFragment : Fragment() {
         }
     }
 
-    fun updatePicture(){
+    private fun updatePicture() {
 
-        if (editName.text.isNotEmpty() || editDescription.text.isNotEmpty()) {
-            showProgress(true)
+        showProgress(true)
+
+        if (::picture.isInitialized && (binding.editName.text.isNotEmpty() || binding.editDescription.text.isNotEmpty())) {
+
+
             var firebaseStorage = FirebaseStorage.getInstance()
             var referec = firebaseStorage.reference.child(viewModel.pet!!.namePhoto)
 
@@ -128,36 +136,50 @@ class AboutPetFragment : Fragment() {
                 }
             }
         }
+        update()
     }
 
 
-    fun update(uri: String, namePhoto: String){
-        if (editName.text.isNotEmpty() || editDescription.text.isNotEmpty()) {
+    private fun update(uri: String = "", namePhoto: String = "") {
+        if (binding.editName.text.isNotEmpty() || binding.editDescription.text.isNotEmpty()) {
 
-            var name = editName.text.toString()
-            var description = editDescription.text.toString()
+            var name = binding.editName.text.toString()
+            var description = binding.editDescription.text.toString()
+            if (uri.isNotEmpty()) viewModel.pet!!.photoUrl = uri
+            if (namePhoto.isNotEmpty()) viewModel.pet!!.namePhoto = namePhoto
+
             fusedLocationClient.lastLocation
-                .addOnSuccessListener {
-                    Log.d("teste", it.latitude.toString())
+                .addOnSuccessListener { it ->
 
-                    LocationService.save(Location("", it.latitude, it.longitude)).addOnSuccessListener{
-                        var ids = ArrayList<String>()
-                        ids.add(it.id)
-                        PetsService.save(Pet(viewModel.pet!!.id,name,description,uri,namePhoto,ids)).addOnSuccessListener { showProgress(false) }
-                    }
+                    LocationService.save(Location("", it.latitude, it.longitude))
+                        .addOnSuccessListener {
+
+                            viewModel.pet!!.locationId.add(it.id)
+
+                            PetsService.update(
+                                Pet(
+                                    viewModel.pet!!.id,
+                                    name,
+                                    description,
+                                    viewModel.pet!!.photoUrl,
+                                    viewModel.pet!!.namePhoto,
+                                    viewModel.pet!!.locationId
+                                )
+                            ).addOnSuccessListener { showProgress(false) }
+                        }
                 }
 
         }
     }
 
     private fun showProgress(show: Boolean) {
-        if(show){
-            editProgress_circular.visibility = View.VISIBLE
-            editName.visibility = View.GONE
-            editDescription.visibility = View.GONE
-            ivEditprofile.visibility = View.GONE
-            btnEditSalvar.visibility = View.GONE
-        }else{
+        if (show) {
+            binding.editProgressCircular.visibility = View.VISIBLE
+            binding.editName.visibility = View.GONE
+            binding.editDescription.visibility = View.GONE
+            binding.editPhoto.visibility = View.GONE
+            binding.btnEditSalvar.visibility = View.GONE
+        } else {
             activity!!.finish()
         }
     }

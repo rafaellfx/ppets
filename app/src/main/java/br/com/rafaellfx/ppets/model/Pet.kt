@@ -6,8 +6,8 @@ data class Pet(
     override var id: String,
     val name: String,
     val description: String,
-    val photoUrl: String,
-    val namePhoto:String,
+    var photoUrl: String,
+    var namePhoto:String,
     val locationId: ArrayList<String>
 ) : Serializable, ModelInterface {
 

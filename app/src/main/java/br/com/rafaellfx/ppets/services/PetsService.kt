@@ -16,8 +16,8 @@ class PetsService {
            return service.save(pet)
         }
 
-        fun update(pet: Pet) {
-            service.update(pet)
+        fun update(pet: Pet): Task<Void> {
+            return service.update(pet)
         }
 
         fun delete(pet: Pet) {

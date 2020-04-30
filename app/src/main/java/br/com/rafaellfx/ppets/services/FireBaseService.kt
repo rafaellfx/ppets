@@ -23,15 +23,11 @@ open class FireBaseService(collection: String) {
             .add(obj.fromMap())
     }
 
-    open fun update(obj: ModelInterface) {
-        firebase.document(obj.id)
+    open fun update(obj: ModelInterface): Task<Void> {
+        return this.firebase
+            .document(obj.id)
             .update(obj.fromMap() as Map<String, Any>)
-            .addOnSuccessListener { documentReference ->
-                Log.d("LOGTESTE", "${documentReference}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("location", "Error ", e)
-            }
+
     }
 
     open fun delete(obj: ModelInterface) {
