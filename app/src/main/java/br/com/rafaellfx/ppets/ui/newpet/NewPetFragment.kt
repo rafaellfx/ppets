@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.model.Location
@@ -81,71 +82,39 @@ class NewPetFragment : Fragment() {
         }
     }
 
-    private fun save(photoUrl: String = "", namePhoto: String = "") {
-
+    private fun addPicture() {
         if (edName.text.isNotEmpty() || edDescription.text.isNotEmpty()) {
+            showProgress()
 
             var name = edName.text.toString()
             var description = edDescription.text.toString()
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener {
-                    Log.d("teste", it.latitude.toString())
 
-                    LocationService.save(Location("", it.latitude, it.longitude)).addOnSuccessListener{
-                        var ids = ArrayList<String>()
-                        ids.add(it.id)
-                        PetsService.save(Pet("",name,description,photoUrl,namePhoto,ids)).addOnSuccessListener { showProgress(false) }
-                    }
-                }
+            if (this::picture.isInitialized) {
 
-        }
-    }
-
-    private fun addPicture() {
-        if (this::picture.isInitialized && edName.text.isNotEmpty() || edDescription.text.isNotEmpty()) {
-
-           showProgress(true)
-
-
-            var fileName = "${Calendar.getInstance().timeInMillis}.jpg"
-            var firebaseStorage = FirebaseStorage.getInstance()
-            var referec = firebaseStorage.reference.child(fileName)
-
-            val baos = ByteArrayOutputStream()
-            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-
-            val uploadTask = referec.putBytes(baos.toByteArray())
-
-            uploadTask.addOnFailureListener { exception ->
-                Log.d("teste", exception.toString())
-            }.addOnSuccessListener {
-                uploadTask.continueWithTask { task ->
-                    if (!task.isSuccessful) {
-                        Log.d("teste", task.exception.toString())
-                    }
-                    referec.downloadUrl
-                }.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val downloadUri = task.result
-                        val namePhoto = referec.name
-                        save(downloadUri.toString(), namePhoto)
-                    }
-                }
+                viewModel.savePicture(name,description,fusedLocationClient,picture)
+            } else {
+                viewModel.savePet(name, description,fusedLocationClient)
             }
-        } else {
-            save()
+
+
         }
+
     }
 
-    private fun showProgress(show: Boolean) {
-        if(show){
-            progress_circular.visibility = View.VISIBLE
-            edName.visibility = View.GONE
-            edDescription.visibility = View.GONE
-            iv_profile.visibility = View.GONE
-            btnSalvar.visibility = View.GONE
-        }else{
-            activity!!.finish()
-        }
+    private fun showProgress() {
+
+        viewModel.isLoader.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it) {
+                progress_circular.visibility = View.VISIBLE
+                edName.visibility = View.GONE
+                edDescription.visibility = View.GONE
+                iv_profile.visibility = View.GONE
+                btnSalvar.visibility = View.GONE
+                tvInform.visibility = View.GONE
+            } else {
+                activity!!.finish()
+            }
+        })
+
     }
 }
