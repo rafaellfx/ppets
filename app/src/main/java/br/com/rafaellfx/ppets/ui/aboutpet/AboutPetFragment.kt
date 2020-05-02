@@ -89,6 +89,7 @@ class AboutPetFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == Activity.RESULT_OK) {
 
@@ -108,80 +109,32 @@ class AboutPetFragment : Fragment() {
 
     private fun updatePicture() {
 
-        showProgress(true)
 
-        if (::picture.isInitialized && (binding.editName.text.isNotEmpty() || binding.editDescription.text.isNotEmpty())) {
-
-
-            var firebaseStorage = FirebaseStorage.getInstance()
-            var referec = firebaseStorage.reference.child(viewModel.pet!!.namePhoto)
-
-            val baos = ByteArrayOutputStream()
-            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-
-            val uploadTask = referec.putBytes(baos.toByteArray())
-
-            uploadTask.addOnSuccessListener {
-                uploadTask.continueWithTask { tasck ->
-                    if (!tasck.isSuccessful) {
-                        Log.d("teste", tasck.exception.toString())
-                    }
-                    referec.downloadUrl
-                }.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val downloadUri = task.result
-                        val namePhoto = referec.name
-                        update(downloadUri.toString(), namePhoto)
-                    }
-                }
-            }
-        }
-        update()
-    }
-
-
-    private fun update(uri: String = "", namePhoto: String = "") {
         if (binding.editName.text.isNotEmpty() || binding.editDescription.text.isNotEmpty()) {
+            showProgress(true)
+            viewModel.pet!!.name = binding.editName.text.toString()
+            viewModel.pet!!.description = binding.editDescription.text.toString()
 
-            var name = binding.editName.text.toString()
-            var description = binding.editDescription.text.toString()
-            if (uri.isNotEmpty()) viewModel.pet!!.photoUrl = uri
-            if (namePhoto.isNotEmpty()) viewModel.pet!!.namePhoto = namePhoto
-
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { it ->
-
-                    LocationService.save(Location("", it.latitude, it.longitude))
-                        .addOnSuccessListener {
-
-                            viewModel.pet!!.locationId.add(it.id)
-
-                            PetsService.update(
-                                Pet(
-                                    viewModel.pet!!.id,
-                                    name,
-                                    description,
-                                    viewModel.pet!!.photoUrl,
-                                    viewModel.pet!!.namePhoto,
-                                    viewModel.pet!!.locationId
-                                )
-                            ).addOnSuccessListener { showProgress(false) }
-                        }
-                }
-
+            if (::picture.isInitialized) {
+                viewModel.updatePicture(picture, fusedLocationClient, viewModel.pet!!)
+            } else {
+                viewModel.update("", "", fusedLocationClient, viewModel.pet!!)
+            }
         }
     }
 
     private fun showProgress(show: Boolean) {
-        if (show) {
-            binding.editProgressCircular.visibility = View.VISIBLE
-            binding.editName.visibility = View.GONE
-            binding.editDescription.visibility = View.GONE
-            binding.editPhoto.visibility = View.GONE
-            binding.btnEditSalvar.visibility = View.GONE
-        } else {
-            activity!!.finish()
-        }
+        viewModel.isLoader.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it) {
+                binding.editProgressCircular.visibility = View.VISIBLE
+                binding.editName.visibility = View.GONE
+                binding.editDescription.visibility = View.GONE
+                binding.editPhoto.visibility = View.GONE
+                binding.btnEditSalvar.visibility = View.GONE
+            } else {
+                activity!!.finish()
+            }
+        })
     }
 
 }

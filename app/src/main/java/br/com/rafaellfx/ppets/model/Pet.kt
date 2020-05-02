@@ -4,8 +4,8 @@ import java.io.Serializable
 
 data class Pet(
     override var id: String,
-    val name: String,
-    val description: String,
+    var name: String,
+    var description: String,
     var photoUrl: String,
     var namePhoto:String,
     val locationId: ArrayList<String>
