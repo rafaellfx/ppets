@@ -21,18 +21,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".EditPetActivity"></activity>
-        <activity android:name=".ui.EditPetActivity" />
-        <activity android:name=".NewPetActivity" />
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".AboutPet" />
-        <activity android:name=".ListPets">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- PhotoPicker API -->
+        </activity>
+        <activity android:name=".LostActivity" />
+        <activity android:name=".NewPetActivity" />
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".AboutPet" />
+        <activity android:name=".ListPets" /> <!-- PhotoPicker API -->
         <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

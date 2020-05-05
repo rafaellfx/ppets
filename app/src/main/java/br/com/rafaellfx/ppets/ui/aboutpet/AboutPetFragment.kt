@@ -15,12 +15,15 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import br.com.rafaellfx.ppets.EditPetActivity
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.databinding.AboutPetFragmentBinding
 import br.com.rafaellfx.ppets.model.Location
 import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
 import br.com.rafaellfx.ppets.services.PetsService
+import br.com.rafaellfx.ppets.ui.editpet.EditPetFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
@@ -32,7 +35,7 @@ import kotlin.collections.ArrayList
 
 class AboutPetFragment : Fragment() {
 
-    val REQUEST_IMAGE_CAPTURE = 1
+    val REQUEST_EDIT_PET = 1
     lateinit var picture: Bitmap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: AboutPetFragmentBinding
@@ -61,80 +64,34 @@ class AboutPetFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
         viewModel = ViewModelProvider(this).get(AboutPetViewModel::class.java)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
-
-        binding = DataBindingUtil.setContentView(activity!!, R.layout.about_pet_fragment)
+        binding = DataBindingUtil.setContentView(requireActivity(), R.layout.about_pet_fragment)
         binding.viewModel = viewModel
         viewModel.pet = arguments?.getSerializable("pet") as Pet
 
-        binding.ivEditprofile.setOnClickListener { takePicture() }
-        binding.editPhoto.setOnClickListener { takePicture() }
-        binding.btnEditSalvar.setOnClickListener { updatePicture() }
-
-        if (viewModel.pet!!.photoUrl.isEmpty()) {
-            binding.editPhoto.visibility = View.GONE
-            binding.ivEditprofile.visibility = View.VISIBLE
+        binding.btnEditar.setOnClickListener {
+            val intent = Intent(context, EditPetActivity::class.java)
+            intent.putExtra("pet", viewModel.pet)
+            startActivityForResult(intent, REQUEST_EDIT_PET)
         }
 
-    }
-
-    private fun takePicture() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { pictureIntent ->
-            pictureIntent.resolveActivity(activity!!.packageManager)?.also {
-                startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+        if (requestCode == REQUEST_EDIT_PET) {
             if (resultCode == Activity.RESULT_OK) {
-
-                picture = data!!.extras!!.get("data") as Bitmap
-                if (viewModel.pet!!.namePhoto.isEmpty()) {
-                    viewModel.pet!!.namePhoto = "${Calendar.getInstance().timeInMillis}.jpg"
-                }
-                binding.editPhoto.visibility = View.VISIBLE
-                binding.ivEditprofile.visibility = View.GONE
-
-                val bitmap = BitmapDrawable(resources, picture)
-                binding.editPhoto.setImageDrawable(bitmap)
-
+                var pet = data!!.extras!!.get("pet") as Pet
+               this.viewModel.pet = pet
+                binding.viewModel = this.viewModel
             }
         }
+
     }
 
-    private fun updatePicture() {
-
-
-        if (binding.editName.text.isNotEmpty() || binding.editDescription.text.isNotEmpty()) {
-            showProgress(true)
-            viewModel.pet!!.name = binding.editName.text.toString()
-            viewModel.pet!!.description = binding.editDescription.text.toString()
-
-            if (::picture.isInitialized) {
-                viewModel.updatePicture(picture, fusedLocationClient, viewModel.pet!!)
-            } else {
-                viewModel.update("", "", fusedLocationClient, viewModel.pet!!)
-            }
-        }
-    }
-
-    private fun showProgress(show: Boolean) {
-        viewModel.isLoader.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it) {
-                binding.editProgressCircular.visibility = View.VISIBLE
-                binding.editName.visibility = View.GONE
-                binding.editDescription.visibility = View.GONE
-                binding.editPhoto.visibility = View.GONE
-                binding.btnEditSalvar.visibility = View.GONE
-            } else {
-                activity!!.finish()
-            }
-        })
-    }
 
 }

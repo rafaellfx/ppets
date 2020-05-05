@@ -11,9 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import br.com.rafaellfx.ppets.R
+import br.com.rafaellfx.ppets.databinding.NewPetFragmentBinding
 import br.com.rafaellfx.ppets.model.Location
 import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
@@ -50,7 +53,7 @@ class NewPetFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(NewPetViewModel::class.java)
 
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         iv_profile.setOnClickListener { takePicture() }
         btnSalvar.setOnClickListener { addPicture() }
@@ -59,7 +62,7 @@ class NewPetFragment : Fragment() {
 
     private fun takePicture() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { pictureIntent ->
-            pictureIntent.resolveActivity(activity!!.packageManager)?.also {
+            pictureIntent.resolveActivity(requireActivity().packageManager)?.also {
                 startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }
@@ -112,7 +115,7 @@ class NewPetFragment : Fragment() {
                 btnSalvar.visibility = View.GONE
                 tvInform.visibility = View.GONE
             } else {
-                activity!!.finish()
+                findNavController().popBackStack()
             }
         })
 

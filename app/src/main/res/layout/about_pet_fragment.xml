@@ -12,97 +12,98 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+
+        <LinearLayout
             android:id="@+id/aboutpet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:orientation="vertical"
             tools:context=".ui.aboutpet.AboutPetFragment">
 
-            <LinearLayout
-                android:id="@+id/about"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <ImageView
+                    android:id="@+id/editPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Foto do pet"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/logo"
+                    app:imageUrl="@{viewModel.pet.photoUrl}" />
+
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="2"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:id="@+id/editName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginTop="20dp"
+                android:elevation="2dp"
+                android:gravity="top"
 
-                <RelativeLayout
-                    android:id="@+id/relativeLayout"
+                android:text="@{viewModel.pet.name}"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/editDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:minHeight="150dp"
+                android:ems="10"
+                android:text="@{viewModel.pet.description}"
+                android:textSize="14sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/divider2"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:scaleType="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/editPhoto"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:imageUrl="@{viewModel.pet.photoUrl}"/>
-
-
-                    <com.makeramen.roundedimageview.RoundedImageView
-                        android:id="@+id/ivEditprofile"
-                        android:visibility="gone"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="50dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/camera"
-                        app:riv_border_width="0dip"
-                        app:riv_corner_radius="30dip"
-                        app:riv_mutate_background="true"
-                        app:riv_oval="true"
-                        app:riv_tile_mode="clamp"
-                        app:imageUrl="@{viewModel.pet.photoUrl}"/>
-
-                </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/editName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="Apelido"
-                    android:textSize="20dp"
-                    android:text="@{viewModel.pet.name}"/>
-
-                <EditText
-                    android:id="@+id/editDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="20dp"
-                    android:ems="10"
-                    android:hint="Descrição"
-                    android:inputType="textMultiLine"
-                    android:textSize="20dp"
-                    android:text="@{viewModel.pet.description}"/>
+                    android:layout_height="1dp"
+                    android:layout_weight="2"
+                    android:background="?android:attr/listDivider" />
 
                 <Button
-                    android:id="@+id/btnEditSalvar"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorPrimary"
-                    android:text="Salvar"
-                    android:textColor="@android:color/white"
-                    android:textSize="20dp" />
-
-                <ProgressBar
-                    android:id="@+id/editProgress_circular"
+                    android:id="@+id/btnEditar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
 
+                    android:text="Editar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btnViewMaps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:text="Visualizar no mapa"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
             </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </LinearLayout>
     </ScrollView>
 </layout>

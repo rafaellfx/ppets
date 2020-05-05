@@ -3,24 +3,22 @@ package br.com.rafaellfx.ppets
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import br.com.rafaellfx.ppets.model.Pet
-import br.com.rafaellfx.ppets.ui.aboutpet.AboutPetFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import br.com.rafaellfx.ppets.ui.editpet.EditPetFragment
 
-class AboutPet : AppCompatActivity() {
+class EditPetActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.about_pet_activity)
+        setContentView(R.layout.edit_pet_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-
         val pet = intent.getSerializableExtra("pet") as Pet
-        setTitle(pet.name)
+        setTitle("Editar")
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, AboutPetFragment.newInstance(pet))
+                .replace(R.id.container, EditPetFragment.newInstance(pet))
                 .commitNow()
         }
     }
@@ -29,5 +27,4 @@ class AboutPet : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
 }

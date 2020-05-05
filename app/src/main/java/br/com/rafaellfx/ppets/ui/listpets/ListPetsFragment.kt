@@ -7,12 +7,13 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import br.com.rafaellfx.ppets.NewPetActivity
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.SignInActivity
 import br.com.rafaellfx.ppets.adapter.PetAdapter
+import br.com.rafaellfx.ppets.extensions.navigateWithAnimations
 import kotlinx.android.synthetic.main.list_pets_fragment.*
 
 class ListPetsFragment : Fragment() {
@@ -38,7 +39,7 @@ class ListPetsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ListPetsViewModel::class.java)
 
         if(!viewModel.isLoggedIn()){
-            activity!!.finish()
+           // activity!!.finish()
             startActivity(Intent(context, SignInActivity::class.java))
         }
 
@@ -56,8 +57,9 @@ class ListPetsFragment : Fragment() {
         observer()
     }
 
-    fun addPet(){
-        startActivity(Intent(context, NewPetActivity::class.java))
+    private fun addPet(){
+        //findNavController().navigate(R.id.action_navigation_home_to_nav_new_Pet_Fragment)
+        findNavController().navigateWithAnimations(R.id.action_navigation_home_to_nav_new_Pet_Fragment)
     }
 
     private fun observer(){

@@ -31,7 +31,7 @@ class NewPetViewModel : ViewModel() {
 
             var location = Location("", it.latitude, it.longitude)
             LocationService.save(location)
-                .addOnSuccessListener { it ->
+                .addOnSuccessListener {
                     var locations = ArrayList<String>()
                     locations.add(it.id)
                     PetsService.save(Pet("", name, description, photoUrl, namePhoto, locations))
