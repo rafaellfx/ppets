@@ -15,6 +15,10 @@ class LocationService {
             return service.findAll()
         }
 
+        fun findId(document: String): DocumentReference {
+            return service.findId(document)
+        }
+
         fun save(location: Location): Task<DocumentReference> {
             return service.save(location)
         }

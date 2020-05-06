@@ -17,6 +17,11 @@ open class FireBaseService(collection: String) {
         return firebase.get()
     }
 
+    open fun findId(document: String): DocumentReference {
+
+        return firebase.document(document)
+    }
+
     open fun save(obj: ModelInterface): Task<DocumentReference> {
 
         return this.firebase

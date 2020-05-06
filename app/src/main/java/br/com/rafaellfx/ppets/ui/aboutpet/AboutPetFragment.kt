@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.com.rafaellfx.ppets.EditPetActivity
+import br.com.rafaellfx.ppets.MapsActivity
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.databinding.AboutPetFragmentBinding
 import br.com.rafaellfx.ppets.model.Location
@@ -77,6 +78,12 @@ class AboutPetFragment : Fragment() {
             val intent = Intent(context, EditPetActivity::class.java)
             intent.putExtra("pet", viewModel.pet)
             startActivityForResult(intent, REQUEST_EDIT_PET)
+        }
+
+        binding.btnViewMaps.setOnClickListener {
+            val intent = Intent(context, MapsActivity::class.java)
+            intent.putExtra("pet", viewModel.pet)
+            startActivity(intent)
         }
 
     }

@@ -44,20 +44,27 @@ class EditPetViewModel : ViewModel() {
 
     fun update(uri: String ="", namePhoto: String="", fusedLocationClient: FusedLocationProviderClient, pet: Pet) {
 
-        if (uri.isNotEmpty()) pet.photoUrl = uri
-        if (namePhoto.isNotEmpty()) pet.namePhoto = namePhoto
+        if (uri.isEmpty() && namePhoto.isEmpty()) {
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { it ->
+            PetsService.update(pet).addOnSuccessListener { isLoader.value = false }
 
-                LocationService.save(Location("", it.latitude, it.longitude))
-                    .addOnSuccessListener {
+        }else{
 
-                        pet.locationId.add(it.id)
+            pet.photoUrl = uri
+            pet.namePhoto = namePhoto
 
-                        PetsService.update(pet).addOnSuccessListener { isLoader.value = false }
-                    }
-            }
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { it ->
+
+                    LocationService.save(Location("", it.latitude, it.longitude))
+                        .addOnSuccessListener {
+
+                            pet.locationId.add(it.id)
+
+                            PetsService.update(pet).addOnSuccessListener { isLoader.value = false }
+                        }
+                }
+        }
     }
 
 
