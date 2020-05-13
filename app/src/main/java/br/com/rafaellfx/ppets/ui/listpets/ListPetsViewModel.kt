@@ -19,8 +19,7 @@ import uk.co.mgbramwell.geofire.android.model.QueryLocation
 
 class ListPetsViewModel : ViewModel() {
 
-    val TAG = "LOG_PPET"
-    private val QUERY_CENTER = GeoPoint(-30.036036036036037, -51.11667124798394)
+
     private val QUERY_RADIUS = 5.0
 
     var listPets: MutableLiveData<List<Pet>> = MutableLiveData<List<Pet>>()
@@ -40,7 +39,7 @@ class ListPetsViewModel : ViewModel() {
             val queryLocation =
                 QueryLocation.fromDegrees(it.latitude, it.longitude)
 
-            val searchDistance = Distance(5.0, DistanceUnit.KILOMETERS)
+            val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
             geoFirestore.query()
                 // .whereEqualTo("title", "The Title")
                 .whereNearTo(queryLocation, searchDistance)
