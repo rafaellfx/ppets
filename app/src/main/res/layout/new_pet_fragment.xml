@@ -1,111 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="br.com.rafaellfx.ppets.ui.newpet.NewPetViewModel" />
-    </data>
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newPet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/newpet"
+        <ImageView
+            android:id="@+id/imgPetPhoto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            tools:context=".ui.newpet.NewPetFragment">
+            android:layout_height="300dp"
+            android:contentDescription="Foto do pet"
+            android:padding="8dp"
+            android:src="@drawable/logo"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/newPet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/camera"
+            app:layout_constraintBottom_toBottomOf="@id/imgPetPhoto"
+            app:layout_constraintEnd_toEndOf="@id/imgPetPhoto"
+            app:layout_constraintStart_toStartOf="@id/imgPetPhoto"
+            app:layout_constraintTop_toTopOf="@id/imgPetPhoto"
+            app:riv_border_width="0dip"
+            app:riv_corner_radius="30dip"
+            app:riv_mutate_background="true"
+            app:riv_oval="true"
+            app:riv_tile_mode="clamp" />
 
-                <RelativeLayout
-                    android:id="@+id/relativeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:scaleType="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/tvInform"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_profile"
+            android:layout_toEndOf="@+id/iv_profile"
+            android:text="Toque para fornecer a foto do Pet."
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@id/imgPetPhoto"
+            app:layout_constraintEnd_toEndOf="@+id/imgPetPhoto"
+            app:layout_constraintStart_toEndOf="@id/iv_profile"
+            app:layout_constraintTop_toTopOf="@id/imgPetPhoto" />
 
-                    <com.makeramen.roundedimageview.RoundedImageView
-                        android:id="@+id/iv_profile"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="57dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/camera"
-                        app:riv_border_width="0dip"
-                        app:riv_corner_radius="30dip"
-                        app:riv_mutate_background="true"
-                        app:riv_oval="true"
-                        app:riv_tile_mode="clamp" />
 
-                    <TextView
-                        android:id="@+id/tvInform"
-                        android:layout_width="76dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/iv_profile"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="36dp"
-                        android:layout_toEndOf="@+id/iv_profile"
-                        android:layout_toRightOf="@+id/iv_profile"
-                        android:text="Toque para fornecer a foto do Pet."
-                        android:textSize="13sp"
-                        android:textStyle="italic" />
+        <EditText
+            android:id="@+id/edName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apelido"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/edDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgPetPhoto" />
 
-                </RelativeLayout>
+        <EditText
+            android:id="@+id/edDescription"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:ems="10"
+            android:hint="Descrição"
+            android:inputType="textMultiLine"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edName"
+            app:layout_constraintVertical_weight="1" />
 
-                <EditText
-                    android:id="@+id/edName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="Apelido"
-                    android:textSize="20dp" />
 
-                <EditText
-                    android:id="@+id/edDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="20dp"
-                    android:ems="10"
-                    android:hint="Descrição"
-                    android:inputType="textMultiLine"
-                    android:textSize="20dp" />
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:foregroundGravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/btnSalvar"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorPrimary"
-                    android:text="Salvar"
-                    android:textColor="@android:color/white"
-                    android:textSize="20dp" />
-
-                <ProgressBar
-                    android:id="@+id/progress_circular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"/>
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-</layout>
+        <Button
+            android:id="@+id/btnSalvar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorPrimary"
+            android:text="Salvar"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edDescription"
+            app:layout_constraintVertical_weight="2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

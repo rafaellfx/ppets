@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -16,9 +15,10 @@
 
 
             <LinearLayout
-                android:id="@+id/edit"
+                android:id="@+id/navigation_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="10dp"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -29,10 +29,9 @@
                 <ImageView
                     android:id="@+id/editPetPhoto"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="300dp"
                     android:contentDescription="Foto do pet"
                     android:padding="8dp"
-                    android:scaleType="centerInside"
                     android:src="@drawable/logo" />
 
                 <com.makeramen.roundedimageview.RoundedImageView
@@ -57,7 +56,6 @@
                     android:id="@+id/editDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_weight="2"
                     android:background="?android:attr/listDivider" />
 
                 <EditText
@@ -76,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:minHeight="150dp"
+                    android:minHeight="100dp"
                     android:ems="10"
                     android:textSize="14sp"
                     android:id="@+id/editPetDescription"

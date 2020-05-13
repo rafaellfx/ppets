@@ -11,23 +11,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import br.com.rafaellfx.ppets.R
-import br.com.rafaellfx.ppets.databinding.NewPetFragmentBinding
-import br.com.rafaellfx.ppets.model.Location
-import br.com.rafaellfx.ppets.model.Pet
-import br.com.rafaellfx.ppets.services.LocationService
-import br.com.rafaellfx.ppets.services.PetsService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.new_pet_fragment.*
-import java.io.ByteArrayOutputStream
-import java.util.*
-import kotlin.collections.ArrayList
 
 class NewPetFragment : Fragment() {
 
@@ -52,7 +43,6 @@ class NewPetFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(NewPetViewModel::class.java)
 
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         iv_profile.setOnClickListener { takePicture() }
@@ -73,21 +63,22 @@ class NewPetFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK) {
 
                 picture = data!!.extras!!.get("data") as Bitmap
-                iv_profile.layoutParams.height = 500
-                iv_profile.layoutParams.width = 500
-                iv_profile.isOval = false
 
+                iv_profile.visibility = View.GONE
                 tvInform.visibility = View.GONE
                 val bitmap = BitmapDrawable(resources, picture)
-                iv_profile.setImageDrawable(bitmap)
+                imgPetPhoto.visibility = View.VISIBLE
+                imgPetPhoto.setImageDrawable(bitmap)
+
 
             }
         }
     }
 
     private fun addPicture() {
+        showProgress()
         if (edName.text.isNotEmpty() || edDescription.text.isNotEmpty()) {
-            showProgress()
+
 
             var name = edName.text.toString()
             var description = edDescription.text.toString()
@@ -106,16 +97,17 @@ class NewPetFragment : Fragment() {
 
     private fun showProgress() {
 
-        viewModel.isLoader.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.isLoader.observe(viewLifecycleOwner, Observer {
             if (it) {
                 progress_circular.visibility = View.VISIBLE
                 edName.visibility = View.GONE
                 edDescription.visibility = View.GONE
                 iv_profile.visibility = View.GONE
                 btnSalvar.visibility = View.GONE
-                tvInform.visibility = View.GONE
+                imgPetPhoto.visibility = View.GONE
             } else {
-                findNavController().popBackStack()
+
+                findNavController().popBackStack(R.id.navigation_home, false)
             }
         })
 

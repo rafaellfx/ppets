@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.navigation.navArgs
 import br.com.rafaellfx.ppets.model.Location
 import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
@@ -27,10 +28,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps2)
+        setContentView(R.layout.activity_maps)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        pet = intent.getSerializableExtra("pet") as Pet
+        val safeArgs: MapsActivityArgs by navArgs()
+        pet = safeArgs.pet
+
         setTitle("Localidades de ${pet.name}")
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

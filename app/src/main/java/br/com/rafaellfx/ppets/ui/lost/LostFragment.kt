@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import br.com.rafaellfx.ppets.R
 
-class LostFragment : Fragment() {
+class LostFragment : Fragment(R.layout.lost_fragment) {
 
     companion object {
         fun newInstance() = LostFragment()
@@ -16,12 +16,12 @@ class LostFragment : Fragment() {
 
     private lateinit var viewModel: LostViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.lost_fragment, container, false)
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View {
+//        return inflater.inflate(R.layout.lost_fragment, container, false)
+//    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

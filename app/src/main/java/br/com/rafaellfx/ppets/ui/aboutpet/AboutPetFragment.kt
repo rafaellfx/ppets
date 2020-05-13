@@ -3,36 +3,24 @@ package br.com.rafaellfx.ppets.ui.aboutpet
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.opengl.Visibility
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import br.com.rafaellfx.ppets.EditPetActivity
-import br.com.rafaellfx.ppets.MapsActivity
+import androidx.navigation.fragment.navArgs
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.databinding.AboutPetFragmentBinding
-import br.com.rafaellfx.ppets.model.Location
+import br.com.rafaellfx.ppets.extensions.navigateWithAnimations
+import br.com.rafaellfx.ppets.extensions.navigateWithAnimationsDestinations
 import br.com.rafaellfx.ppets.model.Pet
-import br.com.rafaellfx.ppets.services.LocationService
-import br.com.rafaellfx.ppets.services.PetsService
-import br.com.rafaellfx.ppets.ui.editpet.EditPetFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.about_pet_fragment.*
-import kotlinx.android.synthetic.main.new_pet_fragment.*
-import java.io.ByteArrayOutputStream
-import java.util.*
-import kotlin.collections.ArrayList
 
 class AboutPetFragment : Fragment() {
 
@@ -43,15 +31,7 @@ class AboutPetFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(pet: Pet): AboutPetFragment {
-            val f = AboutPetFragment()
-
-            val args = Bundle()
-            args.putSerializable("pet", pet)
-            f.arguments = args
-
-            return f
-        }
+        fun newInstance() = AboutPetFragment()
     }
 
     private lateinit var viewModel: AboutPetViewModel
@@ -60,7 +40,10 @@ class AboutPetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.about_pet_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.about_pet_fragment, container, false)
+        viewModel = ViewModelProvider(this).get(AboutPetViewModel::class.java)
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,22 +51,24 @@ class AboutPetFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        viewModel = ViewModelProvider(this).get(AboutPetViewModel::class.java)
-
-        binding = DataBindingUtil.setContentView(requireActivity(), R.layout.about_pet_fragment)
-        binding.viewModel = viewModel
-        viewModel.pet = arguments?.getSerializable("pet") as Pet
+       // binding.viewModel = viewModel
+        val safeArgs: AboutPetFragmentArgs by navArgs()
+        viewModel.pet = safeArgs.pet
 
         binding.btnEditar.setOnClickListener {
-            val intent = Intent(context, EditPetActivity::class.java)
-            intent.putExtra("pet", viewModel.pet)
-            startActivityForResult(intent, REQUEST_EDIT_PET)
+//            val intent = Intent(context, EditPetActivity::class.java)
+//            intent.putExtra("pet", viewModel.pet)
+//            startActivityForResult(intent, REQUEST_EDIT_PET)
+            val directionsEdit = AboutPetFragmentDirections.actionAboutPetFragmentToEditPetFragment(safeArgs.pet)
+            findNavController().navigateWithAnimationsDestinations(directionsEdit)
         }
 
         binding.btnViewMaps.setOnClickListener {
-            val intent = Intent(context, MapsActivity::class.java)
-            intent.putExtra("pet", viewModel.pet)
-            startActivity(intent)
+//            val intent = Intent(context, MapsActivity::class.java)
+//            intent.putExtra("pet", viewModel.pet)
+//            startActivity(intent)
+            val directionsMap = AboutPetFragmentDirections.actionAboutPetFragmentToMapsActivity(safeArgs.pet)
+             findNavController().navigateWithAnimationsDestinations(directionsMap)
         }
 
     }

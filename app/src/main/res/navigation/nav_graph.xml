@@ -11,11 +11,11 @@
         android:label="@string/title_listPet"
         tools:layout="@layout/list_pets_fragment" >
         <action
-            android:id="@+id/action_listPetsFragment_to_lostFragment2"
+            android:id="@+id/action_listPetsFragment_to_lostFragment"
             app:destination="@id/navigation_lost" />
         <action
-            android:id="@+id/action_navigation_home_to_nav_new_Pet_Fragment"
-            app:destination="@id/nav_new_Pet_Fragment" />
+            android:id="@+id/action_navigation_home_to_aboutPetFragment"
+            app:destination="@id/nav_about_petFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_lost"
@@ -24,6 +24,46 @@
         tools:layout="@layout/lost_fragment" />
     <fragment
         android:id="@+id/nav_new_Pet_Fragment"
+        tools:layout="@layout/new_pet_fragment"
         android:name="br.com.rafaellfx.ppets.ui.newpet.NewPetFragment"
         android:label="@string/title_novo" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="br.com.rafaellfx.ppets.ui.signin.SignInFragment"
+        tools:layout="@layout/sign_in_fragment"
+        android:label="SignInFragment" />
+
+    <fragment
+        android:id="@+id/nav_about_petFragment"
+        tools:layout="@layout/about_pet_fragment"
+        android:name="br.com.rafaellfx.ppets.ui.aboutpet.AboutPetFragment"
+        android:label="AboutPetFragment" >
+        <argument
+            android:name="pet"
+            app:argType="br.com.rafaellfx.ppets.model.Pet" />
+        <action
+            android:id="@+id/action_aboutPetFragment_to_editPetFragment"
+            app:destination="@id/editPetFragment" />
+        <action
+            android:id="@+id/action_aboutPetFragment_to_mapsActivity"
+            app:destination="@id/mapsActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPetFragment"
+        tools:layout="@layout/edit_pet_fragment"
+        android:name="br.com.rafaellfx.ppets.ui.editpet.EditPetFragment"
+        android:label="EditPetFragment" >
+        <argument
+            android:name="pet"
+            app:argType="br.com.rafaellfx.ppets.model.Pet" />
+    </fragment>
+    <activity
+        android:id="@+id/mapsActivity"
+        android:name="br.com.rafaellfx.ppets.MapsActivity"
+        android:label="activity_maps"
+        tools:layout="@layout/activity_maps" >
+        <argument
+            android:name="pet"
+            app:argType="br.com.rafaellfx.ppets.model.Pet" />
+    </activity>
 </navigation>

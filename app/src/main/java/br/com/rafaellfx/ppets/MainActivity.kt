@@ -1,50 +1,105 @@
 package br.com.rafaellfx.ppets
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.firebase.ui.auth.AuthUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
+    private val navController by lazy {findNavController(R.id.nav_host_fragment)}
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val PERMISSIONS = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val bottomNavigation: BottomNavigationView = BottomNavigationView
 
+        getPermissions()
 
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
-        navController = findNavController(R.id.nav_host_fragment)
-       // navController = findNavController(this, R.id.nav_host_fragment)
-
-        val appBarConfiguration = AppBarConfiguration(
+        appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_lost
+                R.id.listPetFragment,
+                R.id.lostFragment
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
 
-        navView.setupWithNavController(Navigation.findNavController(this, R.id.nav_host_fragment))
+        NavigationUI.setupActionBarWithNavController(this,navController)
+
+        NavigationUI.setupWithNavController(bottomNavigation,navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id in arrayOf(
+                    R.id.nav_new_Pet_Fragment,
+                    R.id.nav_about_petFragment,
+                    R.id.editPetFragment
+                )){
+                    bottomNavigation.visibility = View.GONE
+
+            }else{
+                bottomNavigation.visibility = View.VISIBLE
+            }
+        }
 
     }
 
+    private fun getPermissions(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                arrayOf(
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                PERMISSIONS)
+
+        }else{
+            Log.d("teste", "Permissão ok")
+        }
+    }
+
+
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || return super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration) ||  super.onSupportNavigateUp()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.pet_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.sair -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        finish()
+                        startActivity(Intent(this, SignInActivity::class.java))
+                    }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

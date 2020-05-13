@@ -1,9 +1,7 @@
 package br.com.rafaellfx.ppets.ui.listpets
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,68 +9,56 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.rafaellfx.ppets.R
-import br.com.rafaellfx.ppets.SignInActivity
 import br.com.rafaellfx.ppets.adapter.PetAdapter
 import br.com.rafaellfx.ppets.extensions.navigateWithAnimations
+import br.com.rafaellfx.ppets.model.Pet
 import kotlinx.android.synthetic.main.list_pets_fragment.*
 
-class ListPetsFragment : Fragment() {
+class ListPetsFragment : Fragment(R.layout.list_pets_fragment) {
 
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private val viewAdapter by lazy { PetAdapter()}
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: ListPetsViewModel
 
-    companion object {
-        fun newInstance() = ListPetsFragment()
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.list_pets_fragment, container, false)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ListPetsViewModel::class.java)
 
-        if(!viewModel.isLoggedIn()){
-           // activity!!.finish()
-            startActivity(Intent(context, SignInActivity::class.java))
+        if (!viewModel.isLoggedIn()) {
+            findNavController().navigate(R.id.signInFragment)
         }
+
 
         viewManager = LinearLayoutManager(activity)
 
-        rv_pets.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-        }
-        floatingActionButton.setOnClickListener { addPet() }
-    }
+        rv_pets.layoutManager = viewManager
 
-    override fun onStart() {
-        super.onStart()
+        rv_pets.adapter = viewAdapter
         observer()
-    }
 
-    private fun addPet(){
-        //findNavController().navigate(R.id.action_navigation_home_to_nav_new_Pet_Fragment)
-        findNavController().navigateWithAnimations(R.id.action_navigation_home_to_nav_new_Pet_Fragment)
-    }
+        floatingActionButton.setOnClickListener { addPet() }
 
-    private fun observer(){
-        //LiveData
-        viewModel.listPets.observe(viewLifecycleOwner, Observer {
-
-            viewModel.listPets.value?.let {
-
-                viewAdapter = PetAdapter(it, activity as Context)
-                rv_pets.adapter = viewAdapter
-            }
+        viewModel.isDownload.observe(viewLifecycleOwner, Observer {check ->
+            if (check) progressBar.visibility = View.VISIBLE else progressBar.visibility = View.GONE
         })
-        viewModel.getPets()
+    }
+
+
+    private fun addPet() {
+        findNavController().navigateWithAnimations(R.id.nav_new_Pet_Fragment)
+    }
+
+    private fun observer() {
+        //LiveData
+        viewModel.listPets.observe(viewLifecycleOwner, Observer { item: List<Pet> ->
+            viewAdapter.update(item)
+        })
+
+        context?.let {
+            viewModel.loadPets(it)
+        }
+
     }
 
 }

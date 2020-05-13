@@ -7,4 +7,7 @@
     <string name="title_lost">Perdidos</string>
     <string name="title_listPet">Pets</string>
     <string name="title_activity_maps">Map</string>
+    <!-- Menu va about -->
+    <string name="title_menu_about_edit">Editar</string>
+    <string name="title_menu_about_map">Visualizar no Mapa</string>
 </resources>

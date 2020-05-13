@@ -1,6 +1,8 @@
 package br.com.rafaellfx.ppets.extensions
 
+import android.os.Bundle
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import br.com.rafaellfx.ppets.R
 
@@ -13,4 +15,8 @@ private val navOptions = NavOptions.Builder()
 
 fun NavController.navigateWithAnimations(destinationId: Int){
     this.navigate(destinationId,null, navOptions)
+}
+
+fun NavController.navigateWithAnimationsDestinations(directions: NavDirections){
+    this.navigate(directions, navOptions)
 }

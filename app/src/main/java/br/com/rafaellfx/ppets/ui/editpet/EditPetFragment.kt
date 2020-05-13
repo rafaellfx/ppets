@@ -7,19 +7,14 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.activity.addCallback
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import br.com.rafaellfx.ppets.MainActivity
+import androidx.navigation.fragment.navArgs
 import br.com.rafaellfx.ppets.R
-import br.com.rafaellfx.ppets.databinding.EditPetFragmentBinding
 import br.com.rafaellfx.ppets.model.Pet
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -27,37 +22,40 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.edit_pet_fragment.*
 import java.util.*
 
-class EditPetFragment : Fragment() {
+class EditPetFragment : Fragment(R.layout.edit_pet_fragment) {
     val REQUEST_IMAGE_CAPTURE = 1
     lateinit var picture: Bitmap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var binding: EditPetFragmentBinding
 
     companion object {
-        fun newInstance(pet: Pet): EditPetFragment {
-            val f = EditPetFragment()
-
-            val args = Bundle()
-            args.putSerializable("pet", pet)
-            f.arguments = args
-
-            return f
-        }
+        fun newInstance() = EditPetFragment()
+//        fun newInstance(pet: Pet): EditPetFragment {
+//            val f = EditPetFragment()
+//
+//            val args = Bundle()
+//            args.putSerializable("pet", pet)
+//            f.arguments = args
+//
+//            return f
+//        }
     }
 
     private lateinit var viewModel: EditPetViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.edit_pet_fragment, container, false)
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View {
+//        return inflater.inflate(R.layout.edit_pet_fragment, container, false)
+//    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(EditPetViewModel::class.java)
+
+        Log.e("LOG_PPET", "navegou")
+
         viewModel.pet = arguments?.getSerializable("pet") as Pet
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -107,7 +105,6 @@ class EditPetFragment : Fragment() {
                 }
                 editPetPhoto.visibility = View.VISIBLE
                 ivEditPetProfile.visibility = View.GONE
-
                 val bitmap = BitmapDrawable(resources, picture)
                 editPetPhoto.setImageDrawable(bitmap)
 

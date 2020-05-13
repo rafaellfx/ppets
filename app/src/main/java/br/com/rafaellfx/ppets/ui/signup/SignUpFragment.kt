@@ -3,20 +3,16 @@ package br.com.rafaellfx.ppets.ui.signup
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import br.com.rafaellfx.ppets.ListPets
+import androidx.navigation.fragment.findNavController
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.databinding.SignUpFragmentBinding
 import br.com.rafaellfx.ppets.model.User
 
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(R.layout.sign_up_fragment) {
 
     companion object {
         fun newInstance() = SignUpFragment()
@@ -24,19 +20,19 @@ class SignUpFragment : Fragment() {
 
     private lateinit var viewModel: SignUpViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.sign_up_fragment, container, false)
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View {
+//        return inflater.inflate(R.layout.sign_up_fragment, container, false)
+//    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         val binding: SignUpFragmentBinding =
-            DataBindingUtil.setContentView(activity!!, R.layout.sign_up_fragment)
+            DataBindingUtil.setContentView(requireActivity(), R.layout.sign_up_fragment)
 
         binding.btnRegister.setOnClickListener {
             if (binding.editEmail.text.isEmpty() || binding.editSenha.text.isEmpty() ||
@@ -57,8 +53,9 @@ class SignUpFragment : Fragment() {
         viewModel.registered.observe(viewLifecycleOwner, Observer {
             viewModel.registered.value?.let {
                 if (it){
-                    activity!!.finish()
-                    startActivity(Intent(context, ListPets::class.java))
+//                    requireActivity().finish()
+//                    startActivity(Intent(context, ListPets::class.java))
+                    findNavController().navigate(R.id.listPetFragment)
                 }else{
                     Toast.makeText(context, "Este E-mail já esta cadastrado!", Toast.LENGTH_LONG).show()
                 }
