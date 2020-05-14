@@ -2,6 +2,9 @@ package br.com.rafaellfx.ppets.ui.signin
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -13,7 +16,7 @@ import br.com.rafaellfx.ppets.SignUpActivity
 import br.com.rafaellfx.ppets.databinding.SignInFragmentBinding
 
 
-class SignInFragment : Fragment(R.layout.sign_in_fragment) {
+class SignInFragment : Fragment() {
 
     companion object {
         fun newInstance() = SignInFragment()
@@ -21,12 +24,12 @@ class SignInFragment : Fragment(R.layout.sign_in_fragment) {
 
     private lateinit var viewModel: SignInViewModel
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        return inflater.inflate(R.layout.sign_in_fragment, container, false)
-//    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.sign_in_fragment, container, false)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

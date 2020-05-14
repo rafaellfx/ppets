@@ -89,10 +89,7 @@ class NewPetFragment : Fragment() {
             } else {
                 viewModel.savePet(name, description,fusedLocationClient)
             }
-
-
         }
-
     }
 
     private fun showProgress() {

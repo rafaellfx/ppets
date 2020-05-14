@@ -35,7 +35,6 @@ class NewPetViewModel : ViewModel() {
                     var locations = ArrayList<String>()
                     locations.add(document.id)
 
-                    //TODO: mudar esta lógica
                     isLoader.value = false
                     PetsService.save(Pet("", name, description, photoUrl, namePhoto, locations))
                     val geoFirestore = GeoFire(LocationService.service.firebase)

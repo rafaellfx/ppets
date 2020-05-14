@@ -12,16 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val navController by lazy {findNavController(R.id.nav_host_fragment)}
+    private val navController by lazy { findNavController(R.id.nav_host_fragment) }
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val PERMISSIONS = 1
 
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigation: BottomNavigationView = BottomNavigationView
 
         getPermissions()
+        isLoggedIn()
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -40,46 +43,52 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        NavigationUI.setupActionBarWithNavController(this,navController)
+        NavigationUI.setupActionBarWithNavController(this, navController)
 
-        NavigationUI.setupWithNavController(bottomNavigation,navController)
+        NavigationUI.setupWithNavController(bottomNavigation, navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id in arrayOf(
+            if (destination.id in arrayOf(
                     R.id.nav_new_Pet_Fragment,
                     R.id.nav_about_petFragment,
                     R.id.editPetFragment
-                )){
-                    bottomNavigation.visibility = View.GONE
+                )
+            ) {
+                bottomNavigation.visibility = View.GONE
 
-            }else{
+            } else {
                 bottomNavigation.visibility = View.VISIBLE
             }
         }
 
     }
 
-    private fun getPermissions(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
+    private fun getPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
 
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(
                     Manifest.permission.INTERNET,
                     Manifest.permission.CAMERA,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
-                PERMISSIONS)
+                PERMISSIONS
+            )
 
-        }else{
+        } else {
             Log.d("teste", "Permissão ok")
         }
     }
 
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) ||  super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        return when (item.itemId) {
             R.id.sair -> {
                 AuthUI.getInstance()
                     .signOut(this)
@@ -99,6 +108,15 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun isLoggedIn() {
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if(currentUser == null){
+            finish()
+            startActivity(Intent(this, SignInActivity::class.java))
         }
     }
 

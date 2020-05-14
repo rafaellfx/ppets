@@ -12,6 +12,7 @@ import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.adapter.PetAdapter
 import br.com.rafaellfx.ppets.extensions.navigateWithAnimations
 import br.com.rafaellfx.ppets.model.Pet
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.list_pets_fragment.*
 
 class ListPetsFragment : Fragment(R.layout.list_pets_fragment) {
@@ -24,11 +25,6 @@ class ListPetsFragment : Fragment(R.layout.list_pets_fragment) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ListPetsViewModel::class.java)
-
-        if (!viewModel.isLoggedIn()) {
-            findNavController().navigate(R.id.signInFragment)
-        }
-
 
         viewManager = LinearLayoutManager(activity)
 

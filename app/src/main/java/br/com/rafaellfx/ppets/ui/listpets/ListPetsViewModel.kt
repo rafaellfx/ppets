@@ -78,18 +78,6 @@ class ListPetsViewModel : ViewModel() {
                 }
         }
 
-
     }
-
-    fun isLoggedIn(): Boolean {
-        val auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-
-        if (currentUser == null) {
-            return false
-        }
-        return true
-    }
-
 
 }

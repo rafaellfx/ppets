@@ -31,13 +31,13 @@
         android:id="@+id/signInFragment"
         android:name="br.com.rafaellfx.ppets.ui.signin.SignInFragment"
         tools:layout="@layout/sign_in_fragment"
-        android:label="SignInFragment" />
+        android:label="@string/title_sign_in" />
 
     <fragment
         android:id="@+id/nav_about_petFragment"
         tools:layout="@layout/about_pet_fragment"
         android:name="br.com.rafaellfx.ppets.ui.aboutpet.AboutPetFragment"
-        android:label="AboutPetFragment" >
+        android:label="@string/title_about" >
         <argument
             android:name="pet"
             app:argType="br.com.rafaellfx.ppets.model.Pet" />
@@ -52,7 +52,7 @@
         android:id="@+id/editPetFragment"
         tools:layout="@layout/edit_pet_fragment"
         android:name="br.com.rafaellfx.ppets.ui.editpet.EditPetFragment"
-        android:label="EditPetFragment" >
+        android:label="@string/title_edit" >
         <argument
             android:name="pet"
             app:argType="br.com.rafaellfx.ppets.model.Pet" />

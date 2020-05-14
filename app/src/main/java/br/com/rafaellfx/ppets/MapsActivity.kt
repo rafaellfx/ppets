@@ -1,6 +1,7 @@
 package br.com.rafaellfx.ppets
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,10 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import java.io.BufferedInputStream
 import java.net.URL
 
@@ -54,24 +52,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        var locations = ArrayList<Location>()
-        pet.locationId.map {document ->
-            LocationService.findId(document).get().addOnSuccessListener { documentSnapshot ->
-                locations.add(
-                    Location(documentSnapshot.id,
-                        documentSnapshot.data?.get("latitude") as Double,
-                        documentSnapshot.data?.get("longitude") as Double)
-                )
-            }.continueWith {
-                locations.map {location ->
-                    val dot = LatLng(location.latidute, location.longitude)
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation.addOnSuccessListener { myLocation ->
+            mMap.addCircle(
+                CircleOptions()
+                    //.center(LatLng(-30.036036036036037, -51.11667124798394))
+                    .center(LatLng(myLocation.latitude, myLocation.longitude))
+                    .radius(5000.0)
+                    .strokeColor(Color.argb(58, 93, 93, 139))
+                    .fillColor(Color.argb(35, 83, 83, 199))
+            )
+        }
+            var locations = ArrayList<Location>()
+            pet.locationId.map { document ->
+                LocationService.findId(document).get().addOnSuccessListener { documentSnapshot ->
+                    locations.add(
+                        Location(
+                            documentSnapshot.id,
+                            documentSnapshot.data?.get("latitude") as Double,
+                            documentSnapshot.data?.get("longitude") as Double
+                        )
+                    )
+                }.continueWith {
+                    locations.map { location ->
+                        val dot = LatLng(location.latidute, location.longitude)
 
-                    mMap.addMarker(MarkerOptions().position(dot).title("${pet.name}"))
+                        mMap.addMarker(MarkerOptions().position(dot).title("${pet.name}"))
 
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(dot,15f))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(dot, 13f))
+                    }
                 }
             }
-        }
 
 
 

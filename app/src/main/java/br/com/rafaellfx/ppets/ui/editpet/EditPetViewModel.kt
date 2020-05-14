@@ -10,6 +10,7 @@ import br.com.rafaellfx.ppets.services.LocationService
 import br.com.rafaellfx.ppets.services.PetsService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.storage.FirebaseStorage
+import uk.co.mgbramwell.geofire.android.GeoFire
 import java.io.ByteArrayOutputStream
 
 class EditPetViewModel : ViewModel() {
@@ -17,7 +18,7 @@ class EditPetViewModel : ViewModel() {
 
     var isLoader = MutableLiveData(true)
 
-    fun updatePicture(picture: Bitmap, fusedLocationClient: FusedLocationProviderClient, pet:Pet){
+    fun updatePicture(picture: Bitmap, fusedLocationClient: FusedLocationProviderClient, pet: Pet) {
 
         var firebaseStorage = FirebaseStorage.getInstance()
         var referec = firebaseStorage.reference.child(pet.namePhoto)
@@ -42,25 +43,35 @@ class EditPetViewModel : ViewModel() {
         }
     }
 
-    fun update(uri: String ="", namePhoto: String="", fusedLocationClient: FusedLocationProviderClient, pet: Pet) {
+    fun update(
+        uri: String = "",
+        namePhoto: String = "",
+        fusedLocationClient: FusedLocationProviderClient,
+        pet: Pet
+    ) {
 
         if (uri.isEmpty() && namePhoto.isEmpty()) {
 
             PetsService.update(pet).addOnSuccessListener { isLoader.value = false }
 
-        }else{
+        } else {
 
             pet.photoUrl = uri
             pet.namePhoto = namePhoto
 
+            var latitude:Double? = null
+            var longitude:Double? = null
+
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { it ->
-
+                    latitude = it.latitude
+                    longitude = it.latitude
                     LocationService.save(Location("", it.latitude, it.longitude))
-                        .addOnSuccessListener {
+                        .addOnSuccessListener { location ->
 
-                            pet.locationId.add(it.id)
-
+                            pet.locationId.add(location.id)
+                            val geoFirestore = GeoFire(LocationService.service.firebase)
+                            geoFirestore.setLocation(location.id, latitude!!, longitude!!)
                             PetsService.update(pet).addOnSuccessListener { isLoader.value = false }
                         }
                 }
