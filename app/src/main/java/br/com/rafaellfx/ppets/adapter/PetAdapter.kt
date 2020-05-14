@@ -1,6 +1,7 @@
 package br.com.rafaellfx.ppets.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.location.Geocoder
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,9 +12,9 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import br.com.rafaellfx.ppets.R
-import br.com.rafaellfx.ppets.model.Location
 import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
+import br.com.rafaellfx.ppets.services.PetsService
 import br.com.rafaellfx.ppets.ui.listpets.ListPetsFragmentDirections
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_pet.view.*
@@ -51,6 +52,19 @@ class PetAdapter() :
                 documentSnapshot.data?.get("longitude") as Double,1)
 
             holder.viewRoot.txtLocation.text = "${address[0].thoroughfare}, ${address[0].featureName}"
+
+            if(listPet[position].lost){
+                holder.viewRoot.imgAbout.visibility = View.GONE
+                holder.viewRoot.imgLost.setImageResource(R.drawable.ic_place)
+            }
+
+            holder.viewRoot.imgLost.setOnClickListener {
+                listPet[position].lost = !listPet[position].lost
+
+                PetsService.update(listPet[position])
+                listPet.remove(listPet[position])
+                update(listPet)
+            }
 
             holder.viewRoot.imgAbout.setOnClickListener {
                 Navigation.findNavController(it).navigate(ListPetsFragmentDirections.actionNavigationHomeToAboutPetFragment(listPet[position]))

@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.model.Pet
@@ -22,7 +23,7 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.edit_pet_fragment.*
 import java.util.*
 
-class EditPetFragment : Fragment(R.layout.edit_pet_fragment) {
+class EditPetFragment : Fragment() {
     val REQUEST_IMAGE_CAPTURE = 1
     lateinit var picture: Bitmap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -42,12 +43,12 @@ class EditPetFragment : Fragment(R.layout.edit_pet_fragment) {
 
     private lateinit var viewModel: EditPetViewModel
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        return inflater.inflate(R.layout.edit_pet_fragment, container, false)
-//    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.edit_pet_fragment, container, false)
+    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -137,10 +138,7 @@ class EditPetFragment : Fragment(R.layout.edit_pet_fragment) {
                 editPetPhoto.visibility = View.GONE
                 btnEditPetSalvar.visibility = View.GONE
             } else {
-                val intent = Intent();
-                intent.putExtra("pet", viewModel.pet!!)
-                requireActivity().setResult(RESULT_OK,intent)
-                requireActivity().finish()
+                findNavController().popBackStack(R.id.navigation_home, false)
             }
         })
     }

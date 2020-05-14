@@ -12,6 +12,8 @@ class PetsService {
 
         fun findAll(): Task<QuerySnapshot> = service.findAll()
 
+        fun find(param: String = "lost", value: Boolean = true): Task<QuerySnapshot> = service.find(param, value)
+
         fun save(pet: Pet): Task<DocumentReference> {
            return service.save(pet)
         }

@@ -5,6 +5,7 @@ import br.com.rafaellfx.ppets.model.ModelInterface
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
 open class FireBaseService(collection: String) {
@@ -14,7 +15,11 @@ open class FireBaseService(collection: String) {
 
     open fun findAll(): Task<QuerySnapshot> {
 
-        return firebase.get()
+        return firebase.whereEqualTo("lost", false).get()
+    }
+
+    open fun find(param: String, value:Any): Task<QuerySnapshot> {
+        return firebase.whereEqualTo(param, value).get()
     }
 
     open fun findId(document: String): DocumentReference {

@@ -30,7 +30,6 @@ class ListPetsViewModel : ViewModel() {
     fun loadPets(context: Context) {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        val pets: MutableList<Pet> = ArrayList<Pet>()
 
         // Pega localizacao do device e add em arrayList
         fusedLocationClient.lastLocation.addOnSuccessListener {
@@ -53,7 +52,7 @@ class ListPetsViewModel : ViewModel() {
                     }
                 }
         }.addOnSuccessListener {
-
+            var pets = ArrayList<Pet>()
             PetsService.findAll()
                 .addOnSuccessListener { p ->
                     p.map { pet ->
@@ -68,6 +67,7 @@ class ListPetsViewModel : ViewModel() {
                                     pet.data["description"].toString(),
                                     pet.data["photoUrl"].toString(),
                                     pet.data["namePhoto"].toString(),
+                                    pet.data["lost"] as Boolean,
                                     locationId
                                 )
                             )

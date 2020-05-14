@@ -8,6 +8,7 @@ data class Pet(
     var description: String,
     var photoUrl: String,
     var namePhoto:String,
+    var lost: Boolean,
     val locationId: ArrayList<String>
 ) : Serializable, ModelInterface {
 
@@ -18,6 +19,7 @@ data class Pet(
             "photoUrl" to photoUrl,
             "namePhoto" to namePhoto,
             "description" to description,
+            "lost" to lost,
             "locationId" to locationId
         )
 

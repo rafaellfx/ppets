@@ -1,7 +1,9 @@
 package br.com.rafaellfx.ppets.ui.listpets
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,11 +17,18 @@ import br.com.rafaellfx.ppets.model.Pet
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.list_pets_fragment.*
 
-class ListPetsFragment : Fragment(R.layout.list_pets_fragment) {
+class ListPetsFragment : Fragment() {
 
     private val viewAdapter by lazy { PetAdapter()}
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: ListPetsViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.list_pets_fragment, container, false)
+    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,7 +57,12 @@ class ListPetsFragment : Fragment(R.layout.list_pets_fragment) {
     private fun observer() {
         //LiveData
         viewModel.listPets.observe(viewLifecycleOwner, Observer { item: List<Pet> ->
-            viewAdapter.update(item)
+            txtPets.visibility = View.GONE
+            if(item.isNotEmpty()){
+                viewAdapter.update(item)
+            } else {
+                txtPets.visibility = View.VISIBLE
+            }
         })
 
         context?.let {
