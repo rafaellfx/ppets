@@ -84,6 +84,7 @@
         <ImageView
             android:id="@+id/imgLost"
             android:src="@drawable/ic_location_off_24px"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/txtName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -95,6 +96,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/arrow"
+            android:visibility="gone"
             android:layout_marginBottom="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

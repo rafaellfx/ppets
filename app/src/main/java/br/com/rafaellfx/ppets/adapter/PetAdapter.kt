@@ -43,6 +43,15 @@ class PetAdapter() :
 
         LocationService.findId(listPet[position].locationId.last()).get().addOnSuccessListener { documentSnapshot ->
 
+
+            if(listPet[position].lost){
+                holder.viewRoot.imgLost.setImageResource(R.drawable.ic_place)
+                holder.viewRoot.imgLost.visibility = View.VISIBLE
+            }else{
+                holder.viewRoot.imgAbout.visibility = View.VISIBLE
+                holder.viewRoot.imgLost.visibility = View.VISIBLE
+            }
+
             holder.viewRoot.txtName.text = "${listPet[position].name}"
 
             loadImage(holder.viewRoot.imgPet, "${listPet[position].photoUrl}")
@@ -53,10 +62,7 @@ class PetAdapter() :
 
             holder.viewRoot.txtLocation.text = "${address[0].thoroughfare}, ${address[0].featureName}"
 
-            if(listPet[position].lost){
-                holder.viewRoot.imgAbout.visibility = View.GONE
-                holder.viewRoot.imgLost.setImageResource(R.drawable.ic_place)
-            }
+
 
             holder.viewRoot.imgLost.setOnClickListener {
                 listPet[position].lost = !listPet[position].lost
