@@ -11,7 +11,7 @@ import br.com.rafaellfx.ppets.ui.signin.SignInFragment
 
 class SignInActivity : AppCompatActivity() {
 
-
+    private val PERMISSIONS = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +22,32 @@ class SignInActivity : AppCompatActivity() {
                 .replace(R.id.container, SignInFragment.newInstance())
                 .commitNow()
         }
+
+        getPermissions()
     }
 
+    private fun getPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
 
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                PERMISSIONS
+            )
+
+        } else {
+            Log.d("teste", "Permissão ok")
+        }
+    }
 
 
 }
