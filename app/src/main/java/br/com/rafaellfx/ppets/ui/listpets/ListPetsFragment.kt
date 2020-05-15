@@ -1,6 +1,7 @@
 package br.com.rafaellfx.ppets.ui.listpets
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ class ListPetsFragment : Fragment() {
         rv_pets.layoutManager = viewManager
 
         rv_pets.adapter = viewAdapter
+
         observer()
 
         floatingActionButton.setOnClickListener { addPet() }
@@ -55,8 +57,14 @@ class ListPetsFragment : Fragment() {
     }
 
     private fun observer() {
+
+        activity?.let {
+            viewModel.loadPets(it)
+        }
+
         //LiveData
         viewModel.listPets.observe(viewLifecycleOwner, Observer { item: List<Pet> ->
+
             txtPets.visibility = View.GONE
             if(item.isNotEmpty()){
                 viewAdapter.update(item)
@@ -65,9 +73,7 @@ class ListPetsFragment : Fragment() {
             }
         })
 
-        context?.let {
-            viewModel.loadPets(it)
-        }
+
 
     }
 

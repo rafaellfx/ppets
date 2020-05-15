@@ -16,6 +16,7 @@ import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
 import br.com.rafaellfx.ppets.services.PetsService
 import br.com.rafaellfx.ppets.ui.listpets.ListPetsFragmentDirections
+import br.com.rafaellfx.ppets.ui.listpets.ListPetsViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_pet.view.*
 
@@ -24,7 +25,7 @@ class PetAdapter() :
     RecyclerView.Adapter<PetAdapter.MyViewHolder>() {
 
     private var listPet: MutableList<Pet> = mutableListOf()
-    private var context:Context? = null
+    private var context: Context? = null
 
     class MyViewHolder(val viewRoot: View) : RecyclerView.ViewHolder(viewRoot)
 
@@ -41,42 +42,47 @@ class PetAdapter() :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        LocationService.findId(listPet[position].locationId.last()).get().addOnSuccessListener { documentSnapshot ->
+        LocationService.findId(listPet[position].locationId.last()).get()
+            .addOnSuccessListener { documentSnapshot ->
 
 
-            if(listPet[position].lost){
-                holder.viewRoot.imgLost.setImageResource(R.drawable.ic_place)
-                holder.viewRoot.imgLost.visibility = View.VISIBLE
-            }else{
-                holder.viewRoot.imgAbout.visibility = View.VISIBLE
-                holder.viewRoot.imgLost.visibility = View.VISIBLE
+                if (listPet[position].lost) {
+                    holder.viewRoot.imgLost.setImageResource(R.drawable.ic_place)
+                    holder.viewRoot.imgLost.visibility = View.VISIBLE
+                } else {
+                    holder.viewRoot.imgAbout.visibility = View.VISIBLE
+                    holder.viewRoot.imgLost.visibility = View.VISIBLE
+                }
+
+                holder.viewRoot.txtName.text = "${listPet[position].name}"
+
+                loadImage(holder.viewRoot.imgPet, "${listPet[position].photoUrl}")
+                val geocoder = Geocoder(context)
+                val address = geocoder.getFromLocation(
+                    documentSnapshot.data?.get("latitude") as Double,
+                    documentSnapshot.data?.get("longitude") as Double, 1
+                )
+
+                holder.viewRoot.txtLocation.text =
+                    "${address[0].thoroughfare}, ${address[0].featureName}"
+
+
+
+                holder.viewRoot.imgLost.setOnClickListener {
+                    listPet[position].lost = !listPet[position].lost
+
+                    PetsService.update(listPet[position]).addOnSuccessListener {
+                        update(listPet)
+                    }
+                }
+
+                holder.viewRoot.imgAbout.setOnClickListener {
+                    Navigation.findNavController(it).navigate(
+                        ListPetsFragmentDirections.actionNavigationHomeToAboutPetFragment(listPet[position])
+                    )
+                }
+
             }
-
-            holder.viewRoot.txtName.text = "${listPet[position].name}"
-
-            loadImage(holder.viewRoot.imgPet, "${listPet[position].photoUrl}")
-            val geocoder = Geocoder(context)
-            val address =  geocoder.getFromLocation(
-                documentSnapshot.data?.get("latitude") as Double,
-                documentSnapshot.data?.get("longitude") as Double,1)
-
-            holder.viewRoot.txtLocation.text = "${address[0].thoroughfare}, ${address[0].featureName}"
-
-
-
-            holder.viewRoot.imgLost.setOnClickListener {
-                listPet[position].lost = !listPet[position].lost
-
-                PetsService.update(listPet[position])
-                listPet.remove(listPet[position])
-                update(listPet)
-            }
-
-            holder.viewRoot.imgAbout.setOnClickListener {
-                Navigation.findNavController(it).navigate(ListPetsFragmentDirections.actionNavigationHomeToAboutPetFragment(listPet[position]))
-            }
-
-        }
 
     }
 
@@ -98,6 +104,7 @@ class PetAdapter() :
     override fun getItemCount() = listPet.size
 
     fun update(listIntemPet: List<Pet>) {
+
         listPet.clear()
         listPet.addAll(listIntemPet)
         notifyDataSetChanged()

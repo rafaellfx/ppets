@@ -40,7 +40,6 @@ class ListPetsViewModel : ViewModel() {
 
             val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
             geoFirestore.query()
-                // .whereEqualTo("title", "The Title")
                 .whereNearTo(queryLocation, searchDistance)
                 .build()
                 .get()
@@ -50,31 +49,34 @@ class ListPetsViewModel : ViewModel() {
                             locationsIdsNoRecused.add(locationsIds.documents.last().id)
                         }
                     }
-                }
-        }.addOnSuccessListener {
-            var pets = ArrayList<Pet>()
-            PetsService.findAll()
-                .addOnSuccessListener { p ->
-                    p.map { pet ->
+                }.addOnSuccessListener {
+                    var pets = ArrayList<Pet>()
+                    PetsService.findAll()
+                        .addOnSuccessListener { p ->
 
-                        var locationId: ArrayList<String> =
-                            ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
-                        if (locationsIdsNoRecused.contains(locationId.last())) {
-                            pets.add(
-                                Pet(
-                                    pet.id,
-                                    pet.data["name"].toString(),
-                                    pet.data["description"].toString(),
-                                    pet.data["photoUrl"].toString(),
-                                    pet.data["namePhoto"].toString(),
-                                    pet.data["lost"] as Boolean,
-                                    locationId
-                                )
-                            )
+                            p.map { pet ->
+
+                                var locationId: ArrayList<String> =
+                                    ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
+
+                                if (locationsIdsNoRecused.contains(locationId.last())) {
+
+                                    pets.add(
+                                        Pet(
+                                            pet.id,
+                                            pet.data["name"].toString(),
+                                            pet.data["description"].toString(),
+                                            pet.data["photoUrl"].toString(),
+                                            pet.data["namePhoto"].toString(),
+                                            pet.data["lost"] as Boolean,
+                                            locationId
+                                        )
+                                    )
+                                }
+                            }
+                            isDownload.value = false
+                            listPets.value = pets
                         }
-                    }
-                    isDownload.value = false
-                    listPets.value = pets
                 }
         }
 
