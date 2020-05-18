@@ -59,10 +59,12 @@
 
             <TextView
                 android:id="@+id/btnRegister"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:text="Efetue seu cadastro"
                 android:textAlignment="textEnd"
+                android:paddingTop="10dp"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="18dp"
                />

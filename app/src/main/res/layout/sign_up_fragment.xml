@@ -20,39 +20,44 @@
 
         <EditText
             android:id="@+id/editName"
-            android:textSize="20dp"
-            android:layout_marginTop="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#000000"
+            android:hint="Nome"
+            android:hyphenationFrequency="none"
             android:inputType="text"
-            android:hint="Nome"/>
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/editPhone"
-            android:inputType="phone"
-            android:layout_marginTop="20dp"
-            android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Telefone"/>
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#000000"
+            android:hint="Telefone"
+            android:inputType="phone"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/editEmail"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="20dp"
-            android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="E-mail"/>
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#000000"
+            android:hint="E-mail"
+            android:inputType="textEmailAddress"
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/editSenha"
-            android:inputType="textPassword"
-            android:layout_marginTop="20dp"
-            android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Senha"/>
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#000000"
+            android:hint="Senha"
+            android:inputType="textPassword"
+            android:textSize="20dp" />
 
         <Button
             android:id="@+id/btnRegister"

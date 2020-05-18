@@ -33,51 +33,56 @@ class ListPetsViewModel : ViewModel() {
 
         // Pega localizacao do device e add em arrayList
         fusedLocationClient.lastLocation.addOnSuccessListener {
-            val geoFirestore = GeoFire(LocationService.service.firebase)
+            if(it != null) {
 
-            val queryLocation =
-                QueryLocation.fromDegrees(it.latitude, it.longitude)
+                val geoFirestore = GeoFire(LocationService.service.firebase)
 
-            val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
-            geoFirestore.query()
-                .whereNearTo(queryLocation, searchDistance)
-                .build()
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        task.addOnSuccessListener { locationsIds ->
-                            locationsIdsNoRecused.add(locationsIds.documents.last().id)
-                        }
-                    }
-                }.addOnSuccessListener {
-                    var pets = ArrayList<Pet>()
-                    PetsService.findAll()
-                        .addOnSuccessListener { p ->
+                val queryLocation =
+                    QueryLocation.fromDegrees(it.latitude, it.longitude)
 
-                            p.map { pet ->
-
-                                var locationId: ArrayList<String> =
-                                    ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
-
-                                if (locationsIdsNoRecused.contains(locationId.last())) {
-
-                                    pets.add(
-                                        Pet(
-                                            pet.id,
-                                            pet.data["name"].toString(),
-                                            pet.data["description"].toString(),
-                                            pet.data["photoUrl"].toString(),
-                                            pet.data["namePhoto"].toString(),
-                                            pet.data["lost"] as Boolean,
-                                            locationId
-                                        )
-                                    )
-                                }
+                val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
+                geoFirestore.query()
+                    .whereNearTo(queryLocation, searchDistance)
+                    .build()
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            task.addOnSuccessListener { locationsIds ->
+                                locationsIdsNoRecused.add(locationsIds.documents.last().id)
                             }
-                            isDownload.value = false
-                            listPets.value = pets
+                        } else {
+                            Log.e("LOG_PPET", task.exception.toString())
                         }
-                }
+                    }.addOnSuccessListener {
+                        var pets = ArrayList<Pet>()
+                        PetsService.findAll()
+                            .addOnSuccessListener { p ->
+
+                                p.map { pet ->
+
+                                    var locationId: ArrayList<String> =
+                                        ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
+
+                                    if (locationsIdsNoRecused.contains(locationId.last())) {
+
+                                        pets.add(
+                                            Pet(
+                                                pet.id,
+                                                pet.data["name"].toString(),
+                                                pet.data["description"].toString(),
+                                                pet.data["photoUrl"].toString(),
+                                                pet.data["namePhoto"].toString(),
+                                                pet.data["lost"] as Boolean,
+                                                locationId
+                                            )
+                                        )
+                                    }
+                                }
+                                isDownload.value = false
+                                listPets.value = pets
+                            }
+                    }
+            }
         }
 
     }

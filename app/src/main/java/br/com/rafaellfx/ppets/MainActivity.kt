@@ -1,9 +1,15 @@
 package br.com.rafaellfx.ppets
 
 import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -12,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
@@ -20,6 +25,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigation: BottomNavigationView = BottomNavigationView
 
-        //getPermissions()
+        getGps()
         isLoggedIn()
 
         appBarConfiguration = AppBarConfiguration(
@@ -63,27 +69,37 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
 
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                PERMISSIONS
-            )
+    private fun getGps() {
+        val service =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        } else {
-            Log.d("teste", "Permissão ok")
+        // Verifica se o GPS está ativo
+        val enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+        // Caso não esteja ativo abre um novo diálogo com as configurações para
+        // realizar se ativamento
+        if (!enabled) {
+            val builder =
+                AlertDialog.Builder(this)
+            builder.setTitle("Atenção")
+            builder.setMessage("É necessário que sua localização esteja habilitada para o funcionamento do PPET, caso contrario será fechado.\n\nVocê deseja habilitar?")
+            builder.setCancelable(true)
+            builder.setPositiveButton("Sim") { dialogInterface: DialogInterface?, i: Int ->
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+                dialogInterface?.dismiss()
+            }
+            builder.setNegativeButton("Não")
+            { dialogInterface: DialogInterface?, i: Int ->
+                finish()
+                dialogInterface?.dismiss()
+            }
+
+            val alertDialog = builder.create()
+            alertDialog.show()
         }
+
     }
 
 
@@ -114,7 +130,7 @@ class MainActivity : AppCompatActivity() {
     private fun isLoggedIn() {
         val auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
-        if(currentUser == null){
+        if (currentUser == null) {
             finish()
             startActivity(Intent(this, SignInActivity::class.java))
         }

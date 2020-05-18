@@ -66,4 +66,9 @@
             android:name="pet"
             app:argType="br.com.rafaellfx.ppets.model.Pet" />
     </activity>
+    <fragment
+        android:id="@+id/signUpFragment"
+        tools:layout="@layout/sign_up_fragment"
+        android:name="br.com.rafaellfx.ppets.ui.signup.SignUpFragment"
+        android:label="SignUpFragment" />
 </navigation>

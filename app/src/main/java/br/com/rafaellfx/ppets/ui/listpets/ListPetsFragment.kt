@@ -47,8 +47,14 @@ class ListPetsFragment : Fragment() {
         floatingActionButton.setOnClickListener { addPet() }
 
         viewModel.isDownload.observe(viewLifecycleOwner, Observer {check ->
+
             if (check) progressBar.visibility = View.VISIBLE else progressBar.visibility = View.GONE
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observer()
     }
 
 
