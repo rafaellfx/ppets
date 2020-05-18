@@ -32,13 +32,14 @@ class ListPetsViewModel : ViewModel() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
         // Pega localizacao do device e add em arrayList
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            if(it != null) {
+        fusedLocationClient.lastLocation.addOnSuccessListener {location ->
+
+            if (location != null) {
 
                 val geoFirestore = GeoFire(LocationService.service.firebase)
 
                 val queryLocation =
-                    QueryLocation.fromDegrees(it.latitude, it.longitude)
+                    QueryLocation.fromDegrees(location.latitude, location.longitude)
 
                 val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
                 geoFirestore.query()

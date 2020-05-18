@@ -58,12 +58,12 @@ class LostViewModel : ViewModel() {
         val pets: MutableList<Pet> = ArrayList<Pet>()
 
         // Pega localizacao do device e add em arrayList
-        return fusedLocationClient.lastLocation.addOnSuccessListener {
-            if (it != null) {
+        return fusedLocationClient.lastLocation.addOnSuccessListener {location ->
+            if (location != null) {
                 val geoFirestore = GeoFire(LocationService.service.firebase)
 
                 val queryLocation =
-                    QueryLocation.fromDegrees(it.latitude, it.longitude)
+                    QueryLocation.fromDegrees(location.latitude, location.longitude)
 
                 val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
                 geoFirestore.query()

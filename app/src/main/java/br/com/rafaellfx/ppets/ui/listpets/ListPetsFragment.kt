@@ -52,13 +52,6 @@ class ListPetsFragment : Fragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.e("LOG_PPET", "onResume")
-        observer()
-    }
-
-
     private fun addPet() {
         findNavController().navigateWithAnimations(R.id.nav_new_Pet_Fragment)
     }
