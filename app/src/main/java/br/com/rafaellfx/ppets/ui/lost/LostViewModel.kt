@@ -59,23 +59,25 @@ class LostViewModel : ViewModel() {
 
         // Pega localizacao do device e add em arrayList
         return fusedLocationClient.lastLocation.addOnSuccessListener {
-            val geoFirestore = GeoFire(LocationService.service.firebase)
+            if (it != null) {
+                val geoFirestore = GeoFire(LocationService.service.firebase)
 
-            val queryLocation =
-                QueryLocation.fromDegrees(it.latitude, it.longitude)
+                val queryLocation =
+                    QueryLocation.fromDegrees(it.latitude, it.longitude)
 
-            val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
-            geoFirestore.query()
-                .whereNearTo(queryLocation, searchDistance)
-                .build()
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        task.addOnSuccessListener { locationsIds ->
-                            locationsIdsNoRecused.add(locationsIds.documents.last().id)
+                val searchDistance = Distance(QUERY_RADIUS, DistanceUnit.KILOMETERS)
+                geoFirestore.query()
+                    .whereNearTo(queryLocation, searchDistance)
+                    .build()
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            task.addOnSuccessListener { locationsIds ->
+                                locationsIdsNoRecused.add(locationsIds.documents.last().id)
+                            }
                         }
                     }
-                }
+            }
         }
     }
 }
