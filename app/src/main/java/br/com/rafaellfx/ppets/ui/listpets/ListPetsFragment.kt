@@ -54,6 +54,7 @@ class ListPetsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.e("LOG_PPET", "onResume")
         observer()
     }
 

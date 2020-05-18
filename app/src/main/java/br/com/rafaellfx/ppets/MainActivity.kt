@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
                 dialogInterface?.dismiss()
+                finish()
             }
             builder.setNegativeButton("Não")
             { dialogInterface: DialogInterface?, i: Int ->
