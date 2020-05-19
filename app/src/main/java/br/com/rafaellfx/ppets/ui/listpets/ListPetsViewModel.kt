@@ -31,7 +31,7 @@ class ListPetsViewModel : ViewModel() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-        // Pega localizacao do device e add em arrayList
+        // Pega localizacao do e add em arrayList
         fusedLocationClient.lastLocation.addOnSuccessListener {location ->
 
             if (location != null) {
@@ -59,24 +59,32 @@ class ListPetsViewModel : ViewModel() {
                         PetsService.findAll()
                             .addOnSuccessListener { p ->
 
+
                                 p.map { pet ->
 
                                     var locationId: ArrayList<String> =
                                         ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
 
-                                    if (locationsIdsNoRecused.contains(locationId.last())) {
+                                     Log.e("LOG_PPET", "${locationsIdsNoRecused.contains(locationId.last())}")
+                                     Log.e("LOG_PPET", " location ${locationsIdsNoRecused}")
+                                     Log.e("LOG_PPET", " pesquisa ${locationId.last()}")
 
-                                        pets.add(
-                                            Pet(
-                                                pet.id,
-                                                pet.data["name"].toString(),
-                                                pet.data["description"].toString(),
-                                                pet.data["photoUrl"].toString(),
-                                                pet.data["namePhoto"].toString(),
-                                                pet.data["lost"] as Boolean,
-                                                locationId
+                                    locationId.map {place ->
+
+                                        if (locationsIdsNoRecused.contains(place)) {
+
+                                            pets.add(
+                                                Pet(
+                                                    pet.id,
+                                                    pet.data["name"].toString(),
+                                                    pet.data["description"].toString(),
+                                                    pet.data["photoUrl"].toString(),
+                                                    pet.data["namePhoto"].toString(),
+                                                    pet.data["lost"] as Boolean,
+                                                    locationId
+                                                )
                                             )
-                                        )
+                                        }
                                     }
                                 }
                                 isDownload.value = false
@@ -84,6 +92,8 @@ class ListPetsViewModel : ViewModel() {
                             }
                     }
             }
+        }.addOnFailureListener { ex ->
+            Log.e("LOG_PPET", ex.toString())
         }
 
     }
