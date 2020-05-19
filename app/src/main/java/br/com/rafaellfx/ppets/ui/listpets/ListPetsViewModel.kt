@@ -32,7 +32,7 @@ class ListPetsViewModel : ViewModel() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
         // Pega localizacao do e add em arrayList
-        fusedLocationClient.lastLocation.addOnSuccessListener {location ->
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
 
             if (location != null) {
 
@@ -49,7 +49,10 @@ class ListPetsViewModel : ViewModel() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             task.addOnSuccessListener { locationsIds ->
-                                locationsIdsNoRecused.add(locationsIds.documents.last().id)
+                                locationsIds.documents.map { l ->
+
+                                    locationsIdsNoRecused.add(l.id)
+                                }
                             }
                         } else {
                             Log.e("LOG_PPET", task.exception.toString())
@@ -65,11 +68,14 @@ class ListPetsViewModel : ViewModel() {
                                     var locationId: ArrayList<String> =
                                         ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
 
-                                     Log.e("LOG_PPET", "${locationsIdsNoRecused.contains(locationId.last())}")
-                                     Log.e("LOG_PPET", " location ${locationsIdsNoRecused}")
-                                     Log.e("LOG_PPET", " pesquisa ${locationId.last()}")
+                                    Log.e(
+                                        "LOG_PPET",
+                                        "${locationsIdsNoRecused.contains(locationId.last())}"
+                                    )
+                                    Log.e("LOG_PPET", " location ${locationsIdsNoRecused}")
+                                    Log.e("LOG_PPET", " pesquisa ${locationId.last()}")
 
-                                    locationId.map {place ->
+                                    locationId.map { place ->
 
                                         if (locationsIdsNoRecused.contains(place)) {
 
@@ -84,6 +90,7 @@ class ListPetsViewModel : ViewModel() {
                                                     locationId
                                                 )
                                             )
+                                            locationsIdsNoRecused.remove(place)
                                         }
                                     }
                                 }
