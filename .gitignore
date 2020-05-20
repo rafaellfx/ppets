@@ -15,3 +15,5 @@
 app/google-services.json
 app/release
 values/google_maps_api.xml
+/debug/res/values/google_maps_api.xml
+release/
