@@ -1,16 +1,13 @@
 package br.com.rafaellfx.ppets.ui.listpets
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.com.rafaellfx.ppets.extensions.TAG
 import br.com.rafaellfx.ppets.model.Pet
 import br.com.rafaellfx.ppets.services.LocationService
 import br.com.rafaellfx.ppets.services.PetsService
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.GeoPoint
 import uk.co.mgbramwell.geofire.android.GeoFire
 import uk.co.mgbramwell.geofire.android.model.Distance
 import uk.co.mgbramwell.geofire.android.model.DistanceUnit
@@ -27,13 +24,12 @@ class ListPetsViewModel : ViewModel() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var locationsIdsNoRecused = ArrayList<String>()
 
-    fun loadPets(context: Context) {
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    fun loadPets(fusedLocationClient: FusedLocationProviderClient) {
 
         // Pega localizacao do e add em arrayList
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
 
+            Log.e(TAG, "$location")
             if (location != null) {
 
                 val geoFirestore = GeoFire(LocationService.service.firebase)
@@ -67,13 +63,6 @@ class ListPetsViewModel : ViewModel() {
 
                                     var locationId: ArrayList<String> =
                                         ((if (pet.data["locationId"] != null) pet.data["locationId"] else ArrayList<String>()) as ArrayList<String>)
-
-                                    Log.e(
-                                        "LOG_PPET",
-                                        "${locationsIdsNoRecused.contains(locationId.last())}"
-                                    )
-                                    Log.e("LOG_PPET", " location ${locationsIdsNoRecused}")
-                                    Log.e("LOG_PPET", " pesquisa ${locationId.last()}")
 
                                     locationId.map { place ->
 

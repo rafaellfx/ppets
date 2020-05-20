@@ -59,8 +59,8 @@ class EditPetViewModel : ViewModel() {
             pet.photoUrl = uri
             pet.namePhoto = namePhoto
 
-            var latitude:Double? = null
-            var longitude:Double? = null
+            var latitude = 0.0
+            var longitude = 0.0
 
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { it ->
@@ -71,7 +71,7 @@ class EditPetViewModel : ViewModel() {
 
                             pet.locationId.add(location.id)
                             val geoFirestore = GeoFire(LocationService.service.firebase)
-                            geoFirestore.setLocation(location.id, latitude!!, longitude!!)
+                            geoFirestore.setLocation(location.id, latitude, longitude)
                             PetsService.update(pet).addOnSuccessListener { isLoader.value = false }
                         }
                 }

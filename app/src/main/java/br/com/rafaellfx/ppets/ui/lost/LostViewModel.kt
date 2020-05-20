@@ -55,7 +55,6 @@ class LostViewModel : ViewModel() {
 
     fun selfLocation(context: Context): Task<Location> {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        val pets: MutableList<Pet> = ArrayList<Pet>()
 
         // Pega localizacao do device e add em arrayList
         return fusedLocationClient.lastLocation.addOnSuccessListener {location ->

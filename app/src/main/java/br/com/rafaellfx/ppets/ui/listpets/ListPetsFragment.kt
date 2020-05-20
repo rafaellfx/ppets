@@ -1,7 +1,6 @@
 package br.com.rafaellfx.ppets.ui.listpets
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,8 @@ import br.com.rafaellfx.ppets.R
 import br.com.rafaellfx.ppets.adapter.PetAdapter
 import br.com.rafaellfx.ppets.extensions.navigateWithAnimations
 import br.com.rafaellfx.ppets.model.Pet
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.list_pets_fragment.*
 
 class ListPetsFragment : Fragment() {
@@ -23,6 +23,7 @@ class ListPetsFragment : Fragment() {
     private val viewAdapter by lazy { PetAdapter()}
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var viewModel: ListPetsViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +38,8 @@ class ListPetsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ListPetsViewModel::class.java)
 
         viewManager = LinearLayoutManager(activity)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         rv_pets.layoutManager = viewManager
 
@@ -59,7 +62,8 @@ class ListPetsFragment : Fragment() {
     private fun observer() {
 
         activity?.let {
-            viewModel.loadPets(it)
+
+            viewModel.loadPets(fusedLocationClient)
         }
 
         //LiveData

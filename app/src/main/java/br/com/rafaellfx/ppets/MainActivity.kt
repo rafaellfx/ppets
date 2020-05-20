@@ -85,14 +85,14 @@ class MainActivity : AppCompatActivity() {
             builder.setTitle("Atenção")
             builder.setMessage("É necessário que sua localização esteja habilitada para o funcionamento do PPET, caso contrario será fechado.\n\nVocê deseja habilitar?")
             builder.setCancelable(true)
-            builder.setPositiveButton("Sim") { dialogInterface: DialogInterface?, i: Int ->
+            builder.setPositiveButton("Sim") { dialogInterface: DialogInterface?, _: Int ->
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
                 dialogInterface?.dismiss()
                 finish()
             }
             builder.setNegativeButton("Não")
-            { dialogInterface: DialogInterface?, i: Int ->
+            { dialogInterface: DialogInterface?, _: Int ->
                 finish()
                 dialogInterface?.dismiss()
             }

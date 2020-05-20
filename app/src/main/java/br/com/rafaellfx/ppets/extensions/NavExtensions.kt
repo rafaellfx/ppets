@@ -20,3 +20,5 @@ fun NavController.navigateWithAnimations(destinationId: Int){
 fun NavController.navigateWithAnimationsDestinations(directions: NavDirections){
     this.navigate(directions, navOptions)
 }
+
+val TAG = "LOG_PPET"
